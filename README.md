@@ -6,6 +6,6 @@ Unviersity at Buffalo
 Authors:
 - Lauren Richardson  
 - Jay Hou (jhhou)
-- Ethan Richardson
+- Ethan Richardson (er59)
 - Cindy Cheng (cjcheng)
 - Zayaan Rahman
