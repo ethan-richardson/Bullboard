@@ -7,5 +7,5 @@ Authors:
 - Lauren Richardson  
 - Jay Hou (jhhou)
 - Ethan Richardson
-- Cindy Cheng
+- Cindy Cheng (cjcheng)
 - Zayaan Rahman
