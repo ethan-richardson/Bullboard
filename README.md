@@ -5,3 +5,4 @@ Unviersity at Buffalo
 
 Authors:
   Lauren Richardson
+  Jay Hou (jhhou)
