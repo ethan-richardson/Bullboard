@@ -9,3 +9,9 @@ Authors:
 - Ethan Richardson (er59)
 - Cindy Cheng (cjcheng)
 - Zayaan Rahman (zayaanra)
+
+TODO:
+[] Look into React/Django/Other Resources that might be helpful
+[] Work on front-end (TCP Sockets, HTTP Requests)
+[] Work on Figma
+[] Setup/Figure out database
