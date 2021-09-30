@@ -4,8 +4,8 @@ CSE 312: Web Applications
 Unviersity at Buffalo
 
 Authors:
-- Lauren Richardson  
+- Lauren Richardson (lr79)
 - Jay Hou (jhhou)
 - Ethan Richardson (er59)
 - Cindy Cheng (cjcheng)
-- Zayaan Rahman
+- Zayaan Rahman (zayaanra)
