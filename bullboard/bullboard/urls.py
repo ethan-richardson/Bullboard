@@ -16,6 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+
+# python modules are annoying
+from backend.views import login_view, another_view
+
+# This is for URL pathing. If you requested page /, it'll send you to / (which is the login page)
+# If we did /blah, it wouldn't work cause we haven't added a path for that.
 urlpatterns = [
+    path('', login_view, name='home'),
+    path('login/', login_view),
+    path('test/', another_view),
     path('admin/', admin.site.urls),
 ]
