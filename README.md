@@ -15,8 +15,8 @@ Authors:
 - Zayaan Rahman (zayaanra)
 
 TODO:
-- [ ] Look into React/Django/Other Resources that might be helpful
-- [ ] Work on front-end (TCP Sockets, HTTP Requests)
+- [ ] Look into React/MongoDB/Other Resources that might be helpful
+- [X] Work on front-end (TCP Sockets, HTTP Requests)
 - [X] Work on Figma
 - [ ] Setup/Figure out database
-- [ ] Work on Open-Source Report for Django
+- [ ] Work on Open-Source Report for Django or MongoDB
