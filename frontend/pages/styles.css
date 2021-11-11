@@ -1,0 +1,73 @@
+
+
+#loginImg {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    height: 100%;
+    z-index: -1;
+}
+#loginInfo {
+    text-align: center;
+    margin-left: 750px;
+}
+#loginHeading {
+    font-family: 'Emblema One', cursive;
+    font-size: 100px;
+    text-align: center;
+}
+#loginBox {
+    width: 600px;
+    height: 400px;
+    background-color:rgb(219, 219, 219);
+    border-radius: 20px;
+    text-align: center;
+    margin: auto;
+    box-shadow: 5px 5px rgb(160, 160, 160);
+    font-family: 'Gruppo', cursive;
+}
+#login {
+    font-size: 24px;
+    line-height: 30px;
+    font-weight: bold;
+}
+.loginInputBox {
+    width: 500px;
+    height: 50px;
+    font-size: 25px;
+    line-height: 50px;
+    vertical-align: middle;
+    font-family: inherit;
+    margin-bottom: 20px;
+}
+#signinButton {
+    background-color: rgb(136, 157, 189);
+    font-size: 30px;
+    font-family: inherit;
+    height: 50px;
+    line-height: 20px;
+    font-weight: bold;
+    border-width: 3px;
+}
+#incorrectLogin {
+    color: red;
+    font-family: monospace;
+    font-weight: inherit;
+    font-size: 20px;
+}
+
+footer {
+    height: 75px;
+    background-color: rgb(235, 235, 235);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    font-size: small;
+    text-align: center;
+    border-top: solid 1px rgb(160, 160, 160);
+}
+
+img {
+    height: 100%;
+}
