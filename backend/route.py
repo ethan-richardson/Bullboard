@@ -14,7 +14,6 @@ class Router:
     # We'll handle the request here. If a request is matched, we can respond to it appropiately.
     def handle_request(self, request):
         for route in self.routes:
-            print(route.path)
             if route.match_req(route.path, request.path):
                 route.action(self.server)
                 return
