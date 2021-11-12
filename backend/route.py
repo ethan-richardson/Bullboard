@@ -42,5 +42,10 @@ def add_paths(router):
     router.add_route(Route("GET", "/login", actions.login))
     router.add_route(Route("GET", "/", actions.login))
     router.add_route(Route("GET", "/register", actions.register))
+    router.add_route(Route("GET", "/functions.js", actions.resp_to_html_paths))
+    router.add_route(Route("GET", "/styles.css", actions.resp_to_html_paths))
+    router.add_route(Route("GET", "/Bull_Board_Mat.png", actions.resp_to_html_paths))
+    router.add_route(Route("GET", "/bull_knocker.jpeg", actions.resp_to_html_paths))
+    router.add_route(Route("GET", "/welcome_mat.png", actions.resp_to_html_paths))
     # TODO - More routes will be added #
 

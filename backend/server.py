@@ -21,6 +21,14 @@ class HTTP(BaseHTTPRequestHandler):
         # in a database.
         pass
 
+    def handle(self):
+        """Handle multiple requests if necessary."""
+        self.close_connection = True
+
+        self.handle_one_request()
+        while not self.close_connection:
+            self.handle_one_request()
+
 
 # TODO - Need to figure how to implement WebSockets with the HTTP library.
 # TODO - Using BaseHTTPRequestHandler doesn't take care of multi-threading.
