@@ -1,4 +1,4 @@
-import respond, file
+import file
 # We want to serve the login page here.
 def login():
     body = file.read_file("Bullboard/frontend/pages/login.html")
