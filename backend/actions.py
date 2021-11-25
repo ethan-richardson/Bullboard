@@ -25,3 +25,10 @@ def resp_to_html_paths(path):
         return [body, response_code, "image/png"]
     else:
         return [body, response_code, "image/jpeg"]
+    
+def create_account(data):
+    email = data["email"]
+    password = data["password"]
+    # TODO - Need to insert into database.
+    # TODO - Do we want password requirements?
+    pass

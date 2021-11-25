@@ -19,6 +19,14 @@ async def get_handler(request):
 
 # Handle POST requests here
 async def post_handler(request):
+    # Wait for the data from the POST request to be received
+    data = await request.post()
+    # Get all the routes associated with a POST request
+    allPostRoutes = routes.post_routes
+    # Call the action that is associated with the current request
+    action = allPostRoutes[request.path]
+    headers = action(data)
+    # TODO - We need authentication (with cookie). We need to store info in database.
     pass
  
 # TODO - Right now, a client is connected any time we receive a request for /websocket
@@ -54,6 +62,8 @@ app.add_routes([
     web.get('/Bull_Board_Mat.png', get_handler),
     web.get('/bull_knocker.jpeg', get_handler),
     web.get('/welcome_mat.png', get_handler),
+    web.get('/create_account.html', get_handler),
+    web.post('/auth', post_handler),
     web.post('/post', post_handler),
     web.get('/websocket', websocket_handler)
 ])
