@@ -19,6 +19,6 @@ EXPOSE 8000
 ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.2.1/wait /wait
 RUN chmod +x /wait
 
-ADD main.py /main.py
+ADD backend/server.py /backend/server.py
 
-CMD /wait && python3 main.py
+CMD /wait && python3 backend/server.py
