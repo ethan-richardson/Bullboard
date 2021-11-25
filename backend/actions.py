@@ -1,7 +1,7 @@
-import file
-# We want to serve the login page here.
+from backend import file
+
 def login():
-    body = file.read_file("Bullboard/frontend/pages/login.html")
+    body = file.read_file("../frontend/pages/login.html")
     response_code = 200
     content_type = "text/html"
     return [body, response_code, content_type]
@@ -15,7 +15,8 @@ def register():
 
 # Respond to HTML paths here.
 def resp_to_html_paths(path):
-    body = file.read_file("Bullboard/frontend/pages%s" % path)
+    body = file.read_file("../frontend/pages%s" % path)
+    print(path)
     response_code = 200
     if path.endswith(".css"):
         return [body, response_code, "text/css"]
