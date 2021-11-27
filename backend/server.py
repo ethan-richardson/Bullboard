@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from aiohttp import web
 import aiohttp
 import routes
@@ -59,3 +60,4 @@ app.add_routes([
 ])
 # Run the server
 web.run_app(app)
+

@@ -25,3 +25,4 @@ def resp_to_html_paths(path):
         return [body, response_code, "image/png"]
     else:
         return [body, response_code, "image/jpeg"]
+
