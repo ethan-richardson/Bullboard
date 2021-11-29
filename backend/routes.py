@@ -15,5 +15,5 @@ get_routes = {
 # Dictionary holding all possible POST requests
 post_routes = {
     "/login_attempt": actions.login_attempt,
-    "/create_account": actions.create_account
+    "/create_account": actions.create_account,
 }

@@ -1,7 +1,9 @@
 import json
+import secrets
 
 import file
 import database
+import re
 
 #Change .. to Bullboard when finished
 
@@ -35,10 +37,24 @@ def login_attempt(data):
     queryMap = {'email': data.get('email'), 'password': data.get('password')}
     if database.verify_login(queryMap):
         #Create login token on successful login
-        # login_token()
+        database.store_token(queryMap['email'], login_token())
         return [b"User Found", 200, "text/plain"]
     else:
         return [b"Content Not Found", 404, "text/plain"]
 
 def create_account(data):
-    return
+    queryMap = {'first': data.get('first'), 'last': data.get('last'), 'email': data.get('email'), 'password': data.get('password')}
+    if verify_password(queryMap['password']):
+        database.add_user(queryMap)
+        return
+    else:
+        return
+
+def verify_password(password):
+    if re.match(r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$", password):
+        return True
+    else:
+        return False
+
+def login_token():
+    return secrets.token_hex(16)

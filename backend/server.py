@@ -66,7 +66,7 @@ app.add_routes([
     web.get('/bull_knocker.jpeg', get_handler),
     web.get('/welcome_mat.png', get_handler),
     web.post('/login_attempt', post_handler),
-    web.post('/create-account', post_handler),
+    web.post('/create_account', post_handler),
     web.get('/websocket', websocket_handler)
 ])
 # Run the server
