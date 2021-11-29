@@ -1,7 +1,9 @@
 import file
+import database
+import bcrypt
 
 def login():
-    body = file.read_file("Bullboard/frontend/pages/login.html")
+    body = file.read_file("../frontend/pages/login.html")
     response_code = 200
     content_type = "text/html"
     return [body, response_code, content_type]
@@ -15,7 +17,7 @@ def register():
 
 # Respond to HTML paths here.
 def resp_to_html_paths(path):
-    body = file.read_file("Bullboard/frontend/pages%s" % path)
+    body = file.read_file("../frontend/pages%s" % path)
     response_code = 200
     if path.endswith(".css"):
         return [body, response_code, "text/css"]
@@ -26,3 +28,13 @@ def resp_to_html_paths(path):
     else:
         return [body, response_code, "image/jpeg"]
 
+def login_attempt(data):
+    if verify_login(data):
+        #Create login token on successful login
+        # login_token()
+        return [b"User Found", 200, "text/plain"]
+    else:
+        return [b"Content Not Found", 404, "text/plain"]
+
+def create_account(data):
+    return

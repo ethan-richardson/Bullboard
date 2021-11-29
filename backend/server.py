@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from aiohttp import web
 import aiohttp
 import routes
@@ -20,7 +19,17 @@ async def get_handler(request):
 
 # Handle POST requests here
 async def post_handler(request):
-    pass
+    data = await request.json()
+    allPostRoutes = routes.post_routes
+    action = allPostRoutes[request.path]
+    headers = action(data)
+    # Send a server response
+    return web.Response(
+        body=headers[0],
+        status=headers[1],
+        content_type=headers[2],
+        charset="utf-8"
+    )
  
 # TODO - Right now, a client is connected any time we receive a request for /websocket
 # TODO - but we might only want to connect a client if their logged in
@@ -55,7 +64,8 @@ app.add_routes([
     web.get('/Bull_Board_Mat.png', get_handler),
     web.get('/bull_knocker.jpeg', get_handler),
     web.get('/welcome_mat.png', get_handler),
-    web.post('/post', post_handler),
+    web.post('/login_attempt', post_handler),
+    web.post('/create-account', post_handler),
     web.get('/websocket', websocket_handler)
 ])
 # Run the server
