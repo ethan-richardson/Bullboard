@@ -1,6 +1,5 @@
 import bcrypt
 from pymongo import MongoClient
-from pprint import pprint
 
 # TODO: Change from localhost to mongo
 mongoString = "mongodb://localhost:27017"
@@ -9,7 +8,7 @@ def connect():
     client = MongoClient(mongoString)
     return client.bullboard
 
-def verify_password(user_info):
+def verify_login(user_info):
     db = connect()
     user_info = db.users.find_one({'Email': user_info['email']})
     # User Exists

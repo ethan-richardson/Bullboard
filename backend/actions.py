@@ -1,6 +1,9 @@
+import json
+
 import file
 import database
-import bcrypt
+
+#Change .. to Bullboard when finished
 
 def login():
     body = file.read_file("../frontend/pages/login.html")
@@ -10,7 +13,7 @@ def login():
 
 # We want to serve the register page here.
 def register():
-    body = b"Register page here."
+    body = file.read_file("../frontend/pages/create_account.html")
     response_code = 200
     content_type = "text/html"
     return [body, response_code, content_type]
@@ -29,7 +32,8 @@ def resp_to_html_paths(path):
         return [body, response_code, "image/jpeg"]
 
 def login_attempt(data):
-    if verify_login(data):
+    queryMap = {'email': data.get('email'), 'password': data.get('password')}
+    if database.verify_login(queryMap):
         #Create login token on successful login
         # login_token()
         return [b"User Found", 200, "text/plain"]
