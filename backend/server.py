@@ -23,12 +23,13 @@ async def post_handler(request):
     # data = data.decode('utf-8')
     allPostRoutes = routes.post_routes
     action = allPostRoutes[request.path]
-    headers = action(data)
+    response = action(data)
     # Send a server response
     return web.Response(
-        body=headers[0],
-        status=headers[1],
-        content_type=headers[2],
+        headers=response[0],
+        body=response[1],
+        status=response[2],
+        content_type=response[3],
         charset="utf-8"
     )
  

@@ -37,18 +37,20 @@ def login_attempt(data):
     queryMap = {'email': data.get('email'), 'password': data.get('password')}
     if database.verify_login(queryMap):
         #Create login token on successful login
-        database.store_token(queryMap['email'], login_token())
-        return [b"User Found", 200, "text/plain"]
+        token = login_token()
+        database.store_token(queryMap['email'], token)
+        header = {'Set-Cookie': 'token=' + token + '; Max-Age=3600; HttpOnly'}
+        return [header, b"User Found", 200, "text/plain"]
     else:
-        return [b"Content Not Found", 404, "text/plain"]
+        return ["", b"Content Not Found", 404, "text/plain"]
 
 def create_account(data):
     queryMap = {'first': data.get('first'), 'last': data.get('last'), 'email': data.get('email'), 'password': data.get('password')}
     if verify_password(queryMap['password']):
         database.add_user(queryMap)
-        return
+        return [b"", b"User Added", 201, "text/plain"]
     else:
-        return
+        return [b"", b"Password does not meet all requirements", 403, "text/plain"]
 
 def verify_password(password):
     if re.match(r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$", password):
