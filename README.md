@@ -22,3 +22,4 @@ TODO:
 - [X] Work on Figma
 - [ ] Setup/Figure out database
 - [ ] Work on Open-Source Report for Django or MongoDB
+- [X] Open-Source Report on HTTP library located at https://github.com/ethan-richardson/Bullboard/blob/jay/reports/Open-Source%20Library%20Report%20-%20HTTP.pdf

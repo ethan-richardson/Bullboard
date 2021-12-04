@@ -19,7 +19,7 @@
 
 <body>
     <div id="loginImg">
-        <img src="bull_knocker.jpeg" alt="bull door knocker">
+        <img src="../images/bull_knocker.jpeg" alt="bull door knocker">
     </div>
 
 
@@ -33,12 +33,16 @@
                 Login using your<br>
                 University at Buffalo email!
             </p>
+<<<<<<< HEAD
             <form action="/auth" method="post" enctype="multipart/form-data">
+=======
+            <form action="/login_attempt" method="post" enctype="multipart/form-data">
+>>>>>>> 4d9babfc897e51a413028d931768f221c1c6f1d7
                 <label for="email"></label>
-                <input id="loginInputBox" size="30" placeholder="ubit@buffalo.edu" type="email" name="email">
+                <input id="email" class="loginInputBox" size="30" placeholder="ubit@buffalo.edu" type="email" name="email" pattern="[a-zA-Z0-9]{3,}@buffalo.edu" required>
                 <br>
                 <label for="password"></label> 
-                <input id="loginInputBox" size="30" placeholder="password" type="text" name="password">
+                <input id="password" class="loginInputBox" size="30" placeholder="Password" type="password" name="password" required>
                 <br>
                 <button id="signinButton">Sign In</button>
             </form>
@@ -61,7 +65,6 @@
             October 2021
         </p>
     </footer>
-    <script src="./functions.js"></script>
 </body>
 
 </html>
