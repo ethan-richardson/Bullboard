@@ -2,7 +2,6 @@ from aiohttp import web
 import aiohttp
 import routes
 
-
 # Handle GET requests here
 async def get_handler(request):
     # Get all the routes associated with a GET request
