@@ -5,7 +5,8 @@ import functions
 
 #Change .. to Bullboard when finished
 
-read_file_string = "../"
+# change to Bullboard when running locally, use ./ when running on Docker
+read_file_string = "./"
 
 def login(request):
     body = file.read_file(read_file_string + "frontend/pages/index.html")

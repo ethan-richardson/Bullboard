@@ -2,8 +2,8 @@ import bcrypt
 from pymongo import MongoClient
 import functions
 
-# TODO: Change from localhost to mongo
-mongoString = "mongodb://localhost:27017"
+# TODO: Change from localhost to mongo when using docker, use localhost when running locally
+mongoString = "mongodb://mongo:27017"
 
 def connect():
     client = MongoClient(mongoString)

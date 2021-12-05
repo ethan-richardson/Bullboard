@@ -6,7 +6,6 @@ import database
 
 # Handle GET requests here
 async def get_handler(request):
-    print(request.path)
     # Get all the routes associated with a GET request
     allGetRoutes = routes.get_routes
     # Call the action that is associated with the current request
@@ -68,7 +67,6 @@ async def image_handler(request):
     )
 
 app = web.Application()
-# TODO - there might be a better way to do this.
 app.add_routes([
     web.get('/login', get_handler),
     web.get('/', get_handler),
