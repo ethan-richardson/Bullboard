@@ -60,4 +60,10 @@ def retrieve_user(token):
     result = db.users.find_one({"Token": token})
     return result
 
+def fetch_all():
+    db = connect()
+    collection = db.users.find({})
+    for doc in collection:
+        print(doc,flush=True)
+
 # def add_post():
