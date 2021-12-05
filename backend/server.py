@@ -1,14 +1,18 @@
 from aiohttp import web
 import aiohttp
 import routes
+import actions
 
 # Handle GET requests here
 async def get_handler(request):
-    # Get all the routes associated with a GET request
-    allGetRoutes = routes.get_routes
-    # Call the action that is associated with the current request
-    action = allGetRoutes[request.path]
-    headers = action() if '.' not in request.path else action(request.path)
+    if request.path.startswith("/images/"):
+        headers = actions.resp_to_html_paths(request.path)
+    else:
+        # Get all the routes associated with a GET request
+        allGetRoutes = routes.get_routes
+        # Call the action that is associated with the current request
+        action = allGetRoutes[request.path]
+        headers = action() if '.' not in request.path else action(request.path)
     # Send a server response
     return web.Response(
         body=headers[0],
@@ -60,6 +64,7 @@ app = web.Application()
 app.add_routes([
     web.get('/login', get_handler),
     web.get('/', get_handler),
+    web.get('/images/{name}', get_handler),
     web.get('/register', get_handler),
     web.get('/functions.js', get_handler),
     web.get('/styles.css', get_handler),
