@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,20 +15,18 @@
     <title>Registration</title>
 </head>
 <body>
-     <form action="/create_account" method="post" enctype="multipart/form-data">
+     <form action="" method="post">
         <label for="first"></label>
-        <input id="first" class="loginInputBox" size="30" placeholder="First Name" type="text" name="first" required>
+        <input id="first" class="loginInputBox" size="30" placeholder="First Name" type="text" name="first">
         <br>
         <label for="last"></label>
-        <input id="last" class="loginInputBox" size="30" placeholder="Last Name" type="text" name="last" required>
+        <input id="last" class="loginInputBox" size="30" placeholder="Last Name" type="text" name="last">
         <br>
-         <p>Must be a valid @buffalo.edu email address</p>
         <label for="email"></label>
-        <input id="email" class="loginInputBox" size="30" placeholder="ubit@buffalo.edu" type="email" name="email" pattern="[a-zA-Z0-9]{3,}@buffalo.edu" required>
+        <input id="email" class="loginInputBox" size="30" placeholder="ubit@buffalo.edu" type="email" name="email">
         <br>
-         <p>Must contain at least 1 lowercase letter, 1 uppercase letter, 1 number, and 1 special character</p>
         <label for="password"></label>
-        <input id="password" class="loginInputBox" size="30" placeholder="Password" type="password" name="password" pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$" required>
+        <input id="password" class="loginInputBox" size="30" placeholder="Password" type="text" name="password">
         <br>
         <button id="signinButton">Create Account</button>
     </form>

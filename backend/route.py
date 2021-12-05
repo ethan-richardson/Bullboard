@@ -41,6 +41,5 @@ def add_paths(router):
     router.add_route(Route("GET", "/login", actions.login))
     router.add_route(Route("GET", "/", actions.login))
     router.add_route(Route("GET", "/register", actions.register))
-    router.add_route(Route("POST", "/login_attempt"), actions.login_attempt)
     # TODO - More routes will be added #
 

@@ -1,75 +1,37 @@
-from aiohttp import web
-import aiohttp
-import routes
+from http.server import BaseHTTPRequestHandler, HTTPServer, SimpleHTTPRequestHandler, ThreadingHTTPServer
+import request, respond, route
+import cgi
 
-# Handle GET requests here
-async def get_handler(request):
-    # Get all the routes associated with a GET request
-    allGetRoutes = routes.get_routes
-    # Call the action that is associated with the current request
-    action = allGetRoutes[request.path]
-    headers = action() if '.' not in request.path else action(request.path)
-    # Send a server response
-    return web.Response(
-        body=headers[0],
-        status=headers[1],
-        content_type=headers[2],
-        charset="utf-8"
-    )
+# Using BaseHTTPRequestHandler as our request handler
+class HTTP(BaseHTTPRequestHandler):
 
-# Handle POST requests here
-async def post_handler(request):
-    data = await request.post()
-    # data = data.decode('utf-8')
-    allPostRoutes = routes.post_routes
-    action = allPostRoutes[request.path]
-    response = action(data)
-    # Send a server response
-    return web.Response(
-        headers=response[0],
-        body=response[1],
-        status=response[2],
-        content_type=response[3],
-        charset="utf-8"
-    )
-
-# TODO - Right now, a client is connected any time we receive a request for /websocket
-# TODO - but we might only want to connect a client if their logged in
-async def websocket_handler(request):
-    ws = web.WebSocketResponse()
-    await ws.prepare(request)
-    print("A new client has connected!")
-    # We're waiting for requests here
-    async for msg in ws:
-        if msg.type == aiohttp.WSMsgType.TEXT:
-            if msg.data == 'close':
-                await ws.close()
-            else:
-                # this will probably change
-                await ws.send_str(msg.data + '/answer')
-        # If there is an exception, the socket will close
-        elif msg.type == aiohttp.WSMsgType.ERROR:
-            print('ws connection closed w/ exception %s' % ws.exception())
-    # If we've reached the end of control flow, then the socket has closed
-    print('websocket connection closed')
-    return ws
+    # We'll GET requests in this function.
+    def do_GET(self):
+        # Create an object based on the current request
+        req = request.Request(self.headers, "GET", self.path)
+        # Create a router object to route based on the current request
+        router = route.Router(self)
+        route.add_paths(router)
+        router.handle_request(req)
+        # TODO - Do stuff according to the path here.
+        
+    # We'll handle POST requests in this function.
+    def do_POST(self):
+        # TODO - We'll have to escape the HTML and then save usernames/passwords
+        # in a database.
+        pass
 
 
-app = web.Application()
-# TODO - there might be a better way to do this.
-app.add_routes([
-    web.get('/login', get_handler),
-    web.get('/', get_handler),
-    web.get('/register', get_handler),
-    web.get('/functions.js', get_handler),
-    web.get('/styles.css', get_handler),
-    web.get('/Bull_Board_Mat.png', get_handler),
-    web.get('/bull_knocker.jpeg', get_handler),
-    web.get('/welcome_mat.png', get_handler),
-    web.post('/login_attempt', post_handler),
-    web.post('/create_account', post_handler),
-    web.get('/websocket', websocket_handler)
-])
+# TODO - Need to figure how to implement WebSockets with the HTTP library.
+# TODO - Using BaseHTTPRequestHandler doesn't take care of multi-threading.
 # Run the server
-web.run_app(app)
+def main():
+    HOST = "localhost"
+    PORT = 8000
+    server_address = (HOST, PORT)
+    server = HTTPServer(server_address, HTTP)
+    print("Server running on port %s" % PORT)
+    server.serve_forever()
 
+if __name__ == "__main__":
+    main()
