@@ -7,14 +7,14 @@ import functions
 
 read_file_string = "../"
 
-def login():
+def login(request):
     body = file.read_file(read_file_string + "frontend/pages/index.html")
     response_code = 200
     content_type = "text/html"
     return [body, response_code, content_type]
 
 # We want to serve the register page here.
-def register():
+def register(request):
     body = file.read_file(read_file_string + "frontend/pages/create_account.html")
     response_code = 200
     content_type = "text/html"
@@ -52,7 +52,7 @@ def create_account(data):
         return [b"", b"Password does not meet all requirements or does not match", 404, "text/plain"]
 
 #Loads newsfeed
-def newsfeed():
+def newsfeed(request):
     body = file.read_file(read_file_string + "frontend/pages/newsfeed.html")
     response_code = 200
     content_type = "text/html"

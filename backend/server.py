@@ -6,11 +6,12 @@ import database
 
 # Handle GET requests here
 async def get_handler(request):
+    print(request.path)
     # Get all the routes associated with a GET request
     allGetRoutes = routes.get_routes
     # Call the action that is associated with the current request
     action = allGetRoutes[request.path]
-    headers = action(request) if '.' not in request.path else action(request)
+    headers = action(request)
     # Send a server response
     return web.Response(
         body=headers[0],
