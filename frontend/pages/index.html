@@ -42,32 +42,14 @@
             <p style="font-size: 18px;">
                 New to Bull Board? <br>
                 Create a new account
-                <a href="create_account.html">here</a>!
+                <a href="/register">here</a>!
             </p>
         </div>
         <p id="invalid"></p>
     </div>
 
 <script src="functions.js"></script>
-<script>
-        function processLogin() {
-            const json = loginJSON();
-            if (json !== "") {
-                const request = new XMLHttpRequest();
-                const feedback = document.getElementById("invalid");
-                request.onreadystatechange = function () {
-                    if (this.readyState === 4 && this.status === 200) {
-                        //Route to newsfeed when setup
-                        alert("You are now logged in")
-                    } else if (this.readyState === 4 && this.status === 404) {
-                        feedback.innerHTML = "Invalid Login";
-                    }
-                };
-                request.open("POST", "/login_attempt");
-                request.send(json);
-            }
-        }
-</script>
+
 </body>
 <footer>
     <p>

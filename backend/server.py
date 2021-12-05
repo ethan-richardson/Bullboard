@@ -2,17 +2,15 @@ from aiohttp import web
 import aiohttp
 import routes
 import actions
+import database
 
 # Handle GET requests here
 async def get_handler(request):
-    if request.path.startswith("/images/"):
-        headers = actions.resp_to_html_paths(request.path)
-    else:
-        # Get all the routes associated with a GET request
-        allGetRoutes = routes.get_routes
-        # Call the action that is associated with the current request
-        action = allGetRoutes[request.path]
-        headers = action() if '.' not in request.path else action(request.path)
+    # Get all the routes associated with a GET request
+    allGetRoutes = routes.get_routes
+    # Call the action that is associated with the current request
+    action = allGetRoutes[request.path]
+    headers = action(request) if '.' not in request.path else action(request)
     # Send a server response
     return web.Response(
         body=headers[0],
@@ -58,22 +56,30 @@ async def websocket_handler(request):
     print('websocket connection closed')
     return ws
 
+async def image_handler(request):
+    # if request.path.startswith("images/"):
+    headers = actions.resp_to_html_paths(request)
+    return web.Response(
+        body=headers[0],
+        status=headers[1],
+        content_type=headers[2],
+        charset="utf-8"
+    )
 
 app = web.Application()
 # TODO - there might be a better way to do this.
 app.add_routes([
     web.get('/login', get_handler),
     web.get('/', get_handler),
-    web.get('/images/{name}', get_handler),
+    web.get('/images/{name}', image_handler),
     web.get('/register', get_handler),
     web.get('/functions.js', get_handler),
     web.get('/styles.css', get_handler),
-    web.get('/Bull_Board_Mat.png', get_handler),
-    web.get('/bull_knocker.jpeg', get_handler),
-    web.get('/welcome_mat.png', get_handler),
     web.post('/login_attempt', post_handler),
     web.post('/create_account', post_handler),
-    web.get('/websocket', websocket_handler)
+    web.get('/websocket', websocket_handler),
+    web.get('/newsfeed', get_handler),
+    web.get('/profile', get_handler)
 ])
 # Run the server
 web.run_app(app)
