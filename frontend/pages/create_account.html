@@ -4,33 +4,79 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <!-- fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Gruppo&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Emblema+One&family=Gruppo&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- style sheet -->
     <link rel="stylesheet" href="styles.css">
-    <title>Registration</title>
+    <!-- tab name -->
+    <title>Create Account</title>
 </head>
+
 <body>
-     <form action="/create_account" method="post" enctype="multipart/form-data">
-        <label for="first"></label>
-        <input id="first" class="loginInputBox" size="30" placeholder="First Name" type="text" name="first" required>
-        <br>
-        <label for="last"></label>
-        <input id="last" class="loginInputBox" size="30" placeholder="Last Name" type="text" name="last" required>
-        <br>
-         <p>Must be a valid @buffalo.edu email address</p>
-        <label for="email"></label>
-        <input id="email" class="loginInputBox" size="30" placeholder="ubit@buffalo.edu" type="email" name="email" pattern="[a-zA-Z0-9]{3,}@buffalo.edu" required>
-        <br>
-         <p>Must contain at least 1 lowercase letter, 1 uppercase letter, 1 number, and 1 special character</p>
-        <label for="password"></label>
-        <input id="password" class="loginInputBox" size="30" placeholder="Password" type="password" name="password" pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$" required>
-        <br>
-        <button id="signinButton">Create Account</button>
-    </form>
+    <div>
+        <div id="registerBox">
+            <p id="register">
+                Please fill out all fields below to<br>
+                create a new account.
+            </p>
+            <hr>
+            <br>
+            <label for="email">UB Email: </label>
+            <input required class="inputBox" id="email" type="email" name="email" pattern="[a-zA-Z0-9]{3,}@buffalo.edu">
+            <br>
+            <label required for="password">Password: </label>
+            <input class="inputBox" id="password" type="password" name="password" pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$">
+            <br>
+            <label required for="rePassword">Re-enter Password: </label>
+            <input class="inputBox" id="rePassword" type="password" name="rePassword" pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$">
+            <p id="passwordRequire">
+                Password must be at least 8 characters long containing<br>
+                uppercase, lowercase, numerical, and special characters
+            </p>
+            <hr>
+            <br>
+            <label required for="firstName">First Name: </label>
+            <input class="inputBox" id="firstName" type="text" name="firstName">
+            <br>
+            <label required for="lastName">Last Name: </label>
+            <input class="inputBox" id="lastName" type="text" name="lastName">
+            <br>
+            <label required for="birthday">Birthday: </label>
+            <input class="inputBox" style="width: 402px; height: 43px;" id="birthday" type="date" name="birthday">
+            <br>
+            <label required for="standing">Student Standing:</label>
+                <select class="inputBox" style="width: 416px; height: 47px;" id="standing" name="standing">
+                <option value="Undergrad">Undergrad</option>
+                <option value="Grad">Grad</option>
+                <option value="PhD">PhD</option>
+                </select>
+            <br>
+            <hr>
+            <br>
+            <div style="text-align: center;">
+                <button id="registerButton" type="submit", value="submit" onclick="processRegistration()">Create Account</button>
+            </div>
+            <p id="invalid"></p>
+        </div>
+        </p>
+    </div>
 </body>
+
+<script src="functions.js"></script>
+
+<footer>
+    <p>
+        BULLBOARD <br>
+        Developed by Lauren Richardson, Jay Hou, Ethan Richardson, Cindy Cheng, Zayaan Rahman <br>
+        December 2021
+    </p>
+</footer>
+
 </html>

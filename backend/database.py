@@ -1,6 +1,6 @@
 import bcrypt
 from pymongo import MongoClient
-import hashlib
+import functions
 
 # TODO: Change from localhost to mongo
 mongoString = "mongodb://localhost:27017"
@@ -26,19 +26,38 @@ def verify_login(user_info):
 
 def add_user(user_info):
     db = connect()
-    hashedPW = hash_password(user_info['password'])
-    db.users.insert_one({'First Name': user_info['first'], 'Last Name': user_info['last'], 'Email': user_info['email'],
-                         'Password': hashedPW})
+    hashed_pw = functions.hash_password(user_info['password'])
+    traits = {
+            'UB Athlete': False,
+            'Scholar': False,
+            'Early Riser': False,
+            'Pride': False,
+            'Foodie': False,
+            'Pet Owner': False,
+            'Car Owner': False,
+            'Gamer': False,
+            'Gym Rat': False,
+            'Night Owl': False
+        }
+    db.users.insert_one({'Email': user_info['email'], 'First Name': user_info['first'], 'Last Name': user_info['last'],
+                         'Picture': '', 'Token': '', 'Password': hashed_pw, 'Birthday': user_info['birthday'], 'Major':
+                         '', 'Standing': user_info['standing'], 'Traits': traits, 'Budget': '', 'Housing Status': '',
+                         'Hometown': ''})
     return
 
-def hash_password(password):
-    return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode("utf-8")
 
 def store_token(email, token):
     db = connect()
-    hashedToken = hash_token(token)
-    db.users.update_one({"Email": email}, {"$set": {"Token": hashedToken}})
+    hashed_token = functions.hash_token(token)
+    db.users.update_one({"Email": email}, {"$set": {"Token": hashed_token}})
     return
 
-def hash_token(token):
-    return hashlib.sha256(token.encode()).hexdigest()
+
+def retrieve_user(token):
+    db = connect()
+    #Hash users current token
+    token = functions.hash_token(token)
+    result = db.users.find_one({"Token": token})
+    return result
+
+# def add_post():

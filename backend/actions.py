@@ -1,59 +1,81 @@
 import json
-import secrets
-
 import file
 import database
-import re
+import functions
 
 #Change .. to Bullboard when finished
 
-def login():
-    body = file.read_file("Bullboard/frontend/pages/login.html")
+read_file_string = "../"
+
+def login(request):
+    body = file.read_file(read_file_string + "frontend/pages/index.html")
+    response_code = 200
+    content_type = "text/html"
+    return [body, response_code, content_type]
+
+# We want to serve the register page here.
+def register(request):
+    body = file.read_file(read_file_string + "frontend/pages/create_account.html")
     response_code = 200
     content_type = "text/html"
     return [body, response_code, content_type]
 
 # Respond to HTML paths here.
-def resp_to_html_paths(path):
+def resp_to_html_paths(request):
+    path = request.path
+    body = file.read_file(read_file_string + "frontend/pages%s" % path)
     response_code = 200
     if path.endswith(".css"):
-        body = file.read_file("Bullboard/frontend/pages%s" % path)
         return [body, response_code, "text/css"]
     elif path.endswith(".js"):
-        body = file.read_file("Bullboard/frontend/pages%s" % path)
         return [body, response_code, "text/javascript"]
     elif path.endswith(".png"):
-        body = file.read_file("Bullboard/frontend/images%s" % path)
         return [body, response_code, "image/png"]
     else:
-        # If path ends in .html
-        body = file.read_file("Bullboard/frontend/pages%s" % path)
-        return [body, response_code, "text/html"]
+        return [body, response_code, "image/jpeg"]
 
 def login_attempt(data):
-    queryMap = {'email': data.get('email'), 'password': data.get('password')}
-    if database.verify_login(queryMap):
+    if database.verify_login(data):
         #Create login token on successful login
-        token = login_token()
-        database.store_token(queryMap['email'], token)
+        token = functions.login_token()
+        database.store_token(data['email'], token)
         header = {'Set-Cookie': 'token=' + token + '; Max-Age=3600; HttpOnly'}
         return [header, b"User Found", 200, "text/plain"]
     else:
         return ["", b"Content Not Found", 404, "text/plain"]
 
 def create_account(data):
-    queryMap = {'first': data.get('first'), 'last': data.get('last'), 'email': data.get('email'), 'password': data.get('password')}
-    if verify_password(queryMap['password']):
-        database.add_user(queryMap)
+    if functions.verify_password(data['password'], data['rePassword']):
+        database.add_user(data)
         return [b"", b"User Added", 201, "text/plain"]
     else:
-        return [b"", b"Password does not meet all requirements", 403, "text/plain"]
+        return [b"", b"Password does not meet all requirements or does not match", 404, "text/plain"]
 
-def verify_password(password):
-    if re.match(r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$", password):
-        return True
+#Loads newsfeed
+def newsfeed(request):
+    body = file.read_file(read_file_string + "frontend/pages/newsfeed.html")
+    response_code = 200
+    content_type = "text/html"
+    return [body, response_code, content_type]
+
+#Loads user profile
+def profile(request):
+    token = request.cookies.get('token')
+    if token:
+        body = functions.load_profile(token)
+        if body:
+            response_code = 200
+            content_type = "text/html"
+            return [body, response_code, content_type]
+        else:
+            return [b"", b"You must log in", 403, "text/plain"]
     else:
-        return False
+        return [b"", b"You must log in", 403, "text/plain"]
 
-def login_token():
-    return secrets.token_hex(16)
+
+def add_post(request):
+    return
+
+def update_account(request):
+
+    return

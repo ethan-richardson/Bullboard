@@ -1,3 +1,4 @@
-pymongo==4.0
+pymongo
 aiohttp==3.8.0
-bcrypt==3.2.0
+bcrypt
+datetime
