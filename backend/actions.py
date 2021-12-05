@@ -55,6 +55,14 @@ def create_account(data):
 #Loads newsfeed
 def newsfeed(request):
     body = file.read_file(read_file_string + "frontend/pages/newsfeed.html")
+    db = database.connect()
+    collection = db.users.find({})
+    for doc in collection:
+        if len(doc["Token"]) != 0:
+            # TODO - Insert HTML here in newsfeed page.
+            pass
+            
+            
     response_code = 200
     content_type = "text/html"
     return [body, response_code, content_type]
