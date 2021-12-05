@@ -5,9 +5,9 @@ services:
     hostname: mongo
     ports:
       - "27017:27017"
-  main:
+  server1:
     build: ../Bullboard
     environment:
       WAIT_HOSTS: mongo:27017
     ports:
-      - '8080:8000'
+      - '8080:8080'

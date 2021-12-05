@@ -31,8 +31,7 @@
     line-height: 30px;
     font-weight: bold;
 }
-
-#loginInputBox {
+.loginInputBox {
     width: 500px;
     height: 50px;
     font-size: 25px;
