@@ -19,7 +19,7 @@ async def get_handler(request):
 
 # Handle POST requests here
 async def post_handler(request):
-    data = await request.post()
+    data = await request.json()
     # data = data.decode('utf-8')
     allPostRoutes = routes.post_routes
     action = allPostRoutes[request.path]

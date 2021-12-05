@@ -1,6 +1,5 @@
 import json
 import secrets
-
 import file
 import database
 import re
@@ -8,7 +7,7 @@ import re
 #Change .. to Bullboard when finished
 
 def login():
-    body = file.read_file("../frontend/pages/login.html")
+    body = file.read_file("../frontend/pages/index.html")
     response_code = 200
     content_type = "text/html"
     return [body, response_code, content_type]
@@ -22,7 +21,10 @@ def register():
 
 # Respond to HTML paths here.
 def resp_to_html_paths(path):
-    body = file.read_file("../frontend/pages%s" % path)
+    if path.startswith("images"):
+        body = file.read_file("../frontend/%s" % path)
+    else:
+        body = file.read_file("../frontend/pages%s" % path)
     response_code = 200
     if path.endswith(".css"):
         return [body, response_code, "text/css"]
@@ -34,25 +36,25 @@ def resp_to_html_paths(path):
         return [body, response_code, "image/jpeg"]
 
 def login_attempt(data):
-    queryMap = {'email': data.get('email'), 'password': data.get('password')}
-    if database.verify_login(queryMap):
+    if database.verify_login(data):
         #Create login token on successful login
         token = login_token()
-        database.store_token(queryMap['email'], token)
+        database.store_token(data['email'], token)
         header = {'Set-Cookie': 'token=' + token + '; Max-Age=3600; HttpOnly'}
         return [header, b"User Found", 200, "text/plain"]
     else:
         return ["", b"Content Not Found", 404, "text/plain"]
 
 def create_account(data):
-    queryMap = {'first': data.get('first'), 'last': data.get('last'), 'email': data.get('email'), 'password': data.get('password')}
-    if verify_password(queryMap['password']):
-        database.add_user(queryMap)
+    if verify_password(data['password'], data['rePassword']):
+        database.add_user(data)
         return [b"", b"User Added", 201, "text/plain"]
     else:
-        return [b"", b"Password does not meet all requirements", 403, "text/plain"]
+        return [b"", b"Password does not meet all requirements or does not match", 404, "text/plain"]
 
-def verify_password(password):
+def verify_password(password, password2):
+    if password != password2:
+        return False
     if re.match(r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$", password):
         return True
     else:

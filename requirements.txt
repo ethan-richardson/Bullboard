@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 pymongo
->>>>>>> c9bf305777788a16b9bfa617824a9dfda1eb86c6
 aiohttp==3.8.0
+bcrypt

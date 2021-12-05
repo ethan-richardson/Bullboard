@@ -27,8 +27,10 @@ def verify_login(user_info):
 def add_user(user_info):
     db = connect()
     hashedPW = hash_password(user_info['password'])
-    db.users.insert_one({'First Name': user_info['first'], 'Last Name': user_info['last'], 'Email': user_info['email'],
-                         'Password': hashedPW})
+    db.users.insert_one({'Email': user_info['email'], 'First Name': user_info['first'], 'Last Name': user_info['last'],
+                         'Token': '', 'Password': hashedPW, 'Birthday': user_info['birthday'], 'Major': '',
+                         'Standing': user_info['standing'], 'Traits': {}, 'Budget': '', 'Housing Status': '',
+                         'Hometown': ''})
     return
 
 def hash_password(password):
