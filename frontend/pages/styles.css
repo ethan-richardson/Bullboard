@@ -1,4 +1,30 @@
+h1 {    
+    font-family: 'Gruppo', cursive;
+    font-size: 50px;
+    margin: 10px;
+    font-weight: bolder;
+}
+h2 {
+    font-family: 'Gruppo', cursive;
+    font-size: 30px;
+    margin: 0px 0px 10px 0px;
+}
+h3 {
+    font-family: 'Gruppo', cursive;
+    font-size: 25px;
+    font-weight: normal;
+    margin: 10px;
+}
 
+#traits {
+    padding: 10px;
+}
+
+.icon {
+    width: 60px;
+    height: 60px;
+    margin: 0px 10px 0px 10px;
+}
 
 #loginImg {
     position: absolute !important;
@@ -17,47 +43,98 @@
     text-align: center;
 }
 #loginBox {
-    width: 600px;
-    height: 400px;
+    width: 500px;
+    height: 350px;
     background-color:rgb(219, 219, 219);
     border-radius: 20px;
     text-align: center;
     margin: auto;
-    box-shadow: 5px 5px rgb(160, 160, 160);
+    box-shadow: 5px 5px 5px rgb(160, 160, 160);
     font-family: 'Gruppo', cursive;
 }
 #login {
     font-size: 24px;
     line-height: 30px;
     font-weight: bold;
+    padding-top: 15px;
 }
-.loginInputBox {
-    width: 500px;
-    height: 50px;
-    font-size: 25px;
-    line-height: 50px;
-    vertical-align: middle;
-    font-family: inherit;
-    margin-bottom: 20px;
-}
-#signinButton {
-    background-color: rgb(136, 157, 189);
-    font-size: 30px;
+
+#loginButton {
+    background-color: rgba(1, 100, 162, 0.4);
+    font-size: 20px;
     font-family: inherit;
     height: 50px;
+    width: 100px;
     line-height: 20px;
     font-weight: bold;
     border-width: 3px;
 }
-#incorrectLogin {
+.inputBox {
+    width: 400px;
+    height: 40px;
+    font-size: 20px;
+    line-height: 20px;
+    vertical-align: middle;
+    font-family: inherit;
+    margin-bottom: 10px;
+    padding-left: 10px;
+}
+#register {
+    font-size: 30px;
+    line-height: 30px;
+    font-weight: bold;
+    text-align: center;
+    margin: 0;
+    padding: 20px 0px 30px 0px;
+}
+#registerBox {
+    width: 600px;
+    height: 680px;
+    background-color:rgb(219, 219, 219);
+    border-radius: 20px;
+    text-align: right;
+    margin: auto;
+    margin-top: 50px;
+    box-shadow: 5px 5px 5px rgb(160, 160, 160);
+    font-family: 'Gruppo', cursive;
+    padding: 20px;
+}
+#passwordRequire {
+    padding-left: 185px;
+    text-align: left;
+    margin-top: 0;
+    text-shadow: 0.5px 0.5px black;
+    color: rgb(1, 100, 162);
+    font-weight: bold;
+}
+
+#registerButton {
+    background-color: rgba(1, 100, 162, 0.4);
+    font-size: 20px;
+    font-family: inherit;
+    height: 50px;
+    width: 200px;
+    line-height: 20px;
+    font-weight: bold;
+    border-width: 3px;
+}
+
+label {
+    font-size: 20px;
+    line-height: 50px;
+    vertical-align: top;
+    font-weight: bold;
+}
+
+#invalid {
     color: red;
     font-family: monospace;
     font-weight: inherit;
-    font-size: 20px;
+    font-size: 18px;
+    text-align: center;
 }
-
 footer {
-    height: 75px;
+    height: 70px;
     background-color: rgb(235, 235, 235);
     position: fixed;
     bottom: 0;
@@ -65,9 +142,59 @@ footer {
     right: 0;
     font-size: small;
     text-align: center;
-    border-top: solid 1px rgb(160, 160, 160);
+    border-top: solid 1px rgb(201, 201, 201);
+    color: gray;
+    font-family: 'Montserrat', sans-serif;
 }
 
 img {
     height: 100%;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+  }
+  
+  li {
+    float: left;
+  }
+  
+  li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+  
+  li a:hover:not(.active) {
+    background-color: #111;
+  }
+  
+  .active {
+    background-color: rgb(1, 100, 162);
+  }
+
+#editProf {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    color: black;
+    font-weight: 200;
+    position: absolute;
+    margin: 20px;
+}
+
+#profPic {
+    width: 300px;
+    height: 300px;
+    border: solid rgb(0, 0, 0);
+    border-width: 10px;
+    border-radius: 100%;
+    margin-top: 50px;
 }
