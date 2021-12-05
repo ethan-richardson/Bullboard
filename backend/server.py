@@ -1,9 +1,11 @@
 from aiohttp import web
 import aiohttp
 import routes
+import database
 
 # Handle GET requests here
 async def get_handler(request):
+    print(request.path)
     # Get all the routes associated with a GET request
     allGetRoutes = routes.get_routes
     # Call the action that is associated with the current request
@@ -56,13 +58,12 @@ async def websocket_handler(request):
 
 
 app = web.Application()
-# TODO - there might be a better way to do this.
 app.add_routes([
     web.get('/login', get_handler),
     web.get('/', get_handler),
-    web.get('/register', get_handler),
     web.get('/functions.js', get_handler),
     web.get('/styles.css', get_handler),
+    web.get('/create_account.html', get_handler),
     web.get('/Bull_Board_Mat.png', get_handler),
     web.get('/bull_knocker.jpeg', get_handler),
     web.get('/welcome_mat.png', get_handler),
@@ -72,4 +73,5 @@ app.add_routes([
 ])
 # Run the server
 web.run_app(app)
+
 

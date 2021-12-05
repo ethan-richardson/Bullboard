@@ -8,30 +8,27 @@ import re
 #Change .. to Bullboard when finished
 
 def login():
-    body = file.read_file("../frontend/pages/login.html")
-    response_code = 200
-    content_type = "text/html"
-    return [body, response_code, content_type]
-
-# We want to serve the register page here.
-def register():
-    body = file.read_file("../frontend/pages/create_account.html")
+    body = file.read_file("Bullboard/frontend/pages/login.html")
     response_code = 200
     content_type = "text/html"
     return [body, response_code, content_type]
 
 # Respond to HTML paths here.
 def resp_to_html_paths(path):
-    body = file.read_file("../frontend/pages%s" % path)
     response_code = 200
     if path.endswith(".css"):
+        body = file.read_file("Bullboard/frontend/pages%s" % path)
         return [body, response_code, "text/css"]
     elif path.endswith(".js"):
+        body = file.read_file("Bullboard/frontend/pages%s" % path)
         return [body, response_code, "text/javascript"]
     elif path.endswith(".png"):
+        body = file.read_file("Bullboard/frontend/images%s" % path)
         return [body, response_code, "image/png"]
     else:
-        return [body, response_code, "image/jpeg"]
+        # If path ends in .html
+        body = file.read_file("Bullboard/frontend/pages%s" % path)
+        return [body, response_code, "text/html"]
 
 def login_attempt(data):
     queryMap = {'email': data.get('email'), 'password': data.get('password')}

@@ -4,7 +4,7 @@ import actions
 get_routes = {
     "/login":actions.login,
     "/": actions.login,
-    "/register": actions.register,
+    "/create_account.html": actions.resp_to_html_paths,
     "/functions.js":actions.resp_to_html_paths,
     "/styles.css":actions.resp_to_html_paths,
     "/Bull_Board_Mat.png":actions.resp_to_html_paths,
