@@ -23,7 +23,7 @@ h3 {
 .icon {
     width: 60px;
     height: 60px;
-    margin: 0px 10px 0px 10px;
+    margin: 10px;
 }
 
 #loginImg {
@@ -71,8 +71,17 @@ h3 {
 .inputBox {
     width: 400px;
     height: 40px;
-    font-size: 20px;
+    font-size: 18px;
     line-height: 20px;
+    vertical-align: middle;
+    font-family: inherit;
+    margin-bottom: 10px;
+    padding-left: 10px;
+}
+.inputBox2 {
+    width: 400px;
+    height: 30px;
+    font-size: 18px;
     vertical-align: middle;
     font-family: inherit;
     margin-bottom: 10px;
@@ -117,12 +126,35 @@ h3 {
     font-weight: bold;
     border-width: 3px;
 }
+#updateButton {
+    background-color: rgba(1, 100, 162, 0.4);
+    font-size: 20px;
+    font-family: inherit;
+    height: 50px;
+    width: 200px;
+    line-height: 20px;
+    font-weight: bolder;
+    border-width: 3px;
+}
 
 label {
     font-size: 20px;
     line-height: 50px;
     vertical-align: top;
     font-weight: bold;
+}
+.traitNames {
+    font-family: 'Gruppo', cursive;
+    font-size: 18px;
+    font-weight: normal;
+    line-height: 20px;
+    padding: 0px 50px 0px 5px;
+}
+.traitDiv {
+    display: flex; 
+    flex-wrap: wrap; 
+    flex-direction: row;
+    padding: 0px 0px 0px 20px;
 }
 
 #invalid {
@@ -132,8 +164,9 @@ label {
     font-size: 18px;
     text-align: center;
 }
+
 footer {
-    height: 70px;
+    height: 8%;
     background-color: rgb(235, 235, 235);
     position: fixed;
     bottom: 0;
@@ -180,6 +213,12 @@ ul {
     background-color: rgb(1, 100, 162);
   }
 
+#updateBox {
+    text-align: center;
+    font-family: 'Gruppo', cursive;
+    margin-top: 20px;
+}
+
 #editProf {
     font-family: 'Montserrat', sans-serif;
     font-size: 20px;
@@ -197,3 +236,44 @@ ul {
     border-radius: 100%;
     margin-top: 50px;
 }
+
+#slidecontainer {
+    width: 100%;
+  }
+  
+  .slider {
+    -webkit-appearance: none;
+    width: 600px;
+    height: 15px;
+    border-radius: 7px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    margin-left: 30px;
+  }
+  
+  .slider:hover {
+    opacity: 2;
+  }
+  
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%; 
+    border: 0;
+    background: rgb(1, 100, 162);
+    cursor: pointer;
+  }
+  
+  .slider::-moz-range-thumb {
+    width: 30px;
+    height: 30px;  
+    border-radius: 50%; 
+    border: 0;
+    background: rgb(1, 100, 162);
+    cursor: pointer;
+  }
