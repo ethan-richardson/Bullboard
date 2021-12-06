@@ -35,9 +35,7 @@ async def post_handler(request):
         content_type=response[3],
         charset="utf-8"
     )
- 
-# TODO - Right now, a client is connected any time we receive a request for /websocket
-# TODO - but we might only want to connect a client if their logged in
+
 async def websocket_handler(request):
     ws = web.WebSocketResponse()
     await ws.prepare(request)
