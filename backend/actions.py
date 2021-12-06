@@ -54,18 +54,21 @@ def create_account(data):
 
 #Loads newsfeed
 def newsfeed(request):
-    body = file.read_file(read_file_string + "frontend/pages/newsfeed.html")
-    db = database.connect()
-    collection = db.users.find({})
+    body = file.read_file_as_list(read_file_string + "frontend/pages/newsfeed.html")
+    authenticated = []
+    idx = body.index('    <div id="list">\n')
+    collection = database.fetch_all()
     for doc in collection:
         if len(doc["Token"]) != 0:
+            authenticated.append(doc["Email"])
             # TODO - Insert HTML here in newsfeed page.
-            pass
-            
-            
+    for user in authenticated:
+        if user not in body[idx+1]:
+           body[idx+1] = user + body[idx+1]
+    encoded = ''.join(ele for ele in body).encode()
     response_code = 200
     content_type = "text/html"
-    return [body, response_code, content_type]
+    return [encoded, response_code, content_type]
 
 #Loads user profile
 def profile(request):
