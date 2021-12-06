@@ -62,7 +62,7 @@
         </div>
         <br>
         <div class="slidecontainer">
-            <label for="budget" style="font-size: 20px;">Max Budget: $<span id="demo"></span> per month</label>
+            <label for="budget" style="font-size: 20px;">Max Budget: $<span id="maxBudget"></span> per month</label>
             <br>
             <input type="range" name="range" min="0" max="2000" step="50" value="1000" class="slider" id="budget">
             <p>
@@ -133,7 +133,7 @@
     <script src="functions.js"></script>
     <script>
         var slider = document.getElementById("budget");
-        var output = document.getElementById("demo");
+        var output = document.getElementById("maxBudget");
         output.innerHTML = slider.value;
         
         slider.oninput = function() {

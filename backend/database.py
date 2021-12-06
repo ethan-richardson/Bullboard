@@ -1,19 +1,21 @@
 import bcrypt
+import pymongo
 from pymongo import MongoClient
 import functions
+import datetime
 
 # TODO: Change from localhost to mongo
-mongoString = "mongodb://localhost:27017"
+mongo_string = "mongodb://localhost:27017"
 
 def connect():
-    client = MongoClient(mongoString)
+    client = MongoClient(mongo_string)
     return client.bullboard
 
 def verify_login(user_info):
     db = connect()
     found_user = db.users.find_one({'Email': user_info['email']})
     # User Exists
-    if user_info:
+    if found_user:
         # Password matches
         if bcrypt.checkpw(user_info['password'].encode(), found_user['Password'].encode()):
             return True
@@ -81,19 +83,19 @@ def update_profile(data, image_name, token):
 
 def construct_update_json(data, image_name):
     traits = {
-            'UB Athlete': functions.html_escaper(data['traits']['athlete']),
-            'Scholar': functions.html_escaper(data['traits']['scholar']),
-            'Early Riser': functions.html_escaper(data['traits']['earlyRiser']),
-            'Pride': functions.html_escaper(data['traits']['pride']),
-            'Foodie': functions.html_escaper(data['traits']['foodie']),
-            'Pet Owner': functions.html_escaper(data['traits']['petOwner']),
-            'Car Owner': functions.html_escaper(data['traits']['carOwner']),
-            'Gamer': functions.html_escaper(data['traits']['gamer']),
-            'Gym Rat': functions.html_escaper(data['traits']['workout']),
-            'Night Owl': functions.html_escaper(data['traits']['nightOwl'])
+            'UB Athlete': data['traits']['athlete'],
+            'Scholar': data['traits']['scholar'],
+            'Early Riser': data['traits']['earlyRiser'],
+            'Pride': data['traits']['pride'],
+            'Foodie': data['traits']['foodie'],
+            'Pet Owner': data['traits']['petOwner'],
+            'Car Owner': data['traits']['carOwner'],
+            'Gamer': data['traits']['gamer'],
+            'Gym Rat': data['traits']['workout'],
+            'Night Owl': data['traits']['nightOwl']
         }
     json = {
-        'Budget': functions.html_escaper(data['budget']),
+        'Budget': data['budget'],
         'Major': functions.html_escaper(data['major']),
         'Standing': functions.html_escaper(data['standing']),
         'Housing Status': functions.html_escaper(data['status']),
@@ -104,6 +106,19 @@ def construct_update_json(data, image_name):
     return json
 
 
-# def add_post():
+def add_post(user, post):
+    db = connect()
+    json = {
+        'First Name': user['First Name'],
+        'Last Name': user['Last Name'],
+        'Post': functions.html_escaper(post['post']),
+        'Posted': datetime.datetime.now(),
+    }
+    db.posts.insert_one(json)
+    get_posts()
 
+def get_posts():
+    db = connect()
+    result = db.posts.find().sort('Posted', pymongo.DESCENDING)
+    return result
 

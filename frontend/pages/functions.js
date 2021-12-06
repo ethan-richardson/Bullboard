@@ -74,14 +74,15 @@ function processLogin() {
 
 //Generates update profile json string
 async function updateJSON() {
-    var budget = parseInt(document.getElementById("budget"));
+    var budget = document.getElementById("budget");
     var standing = document.getElementById("standing");
     var status = document.getElementById("status");
     var major = document.getElementById("major");
     var profPic = document.getElementById("profilePicture");
     var selectedTraits = getTraits();
+    budget = (parseInt(budget.value));
     var jsonMap = {
-        budget: budget.value,
+        budget: budget,
         major: major.value,
         status: status.value,
         standing: standing.value,
@@ -140,7 +141,7 @@ async function processUpdate() {
 //Generates post adding json string
 function addPostJSON() {
     var post = document.getElementById("post");
-    return JSON.stringify({'post': post});
+    return JSON.stringify({'post': post.value});
 }
 
 //Sends post info to server
@@ -150,9 +151,7 @@ function processPost() {
         const request = new XMLHttpRequest();
         request.onreadystatechange = function () {
             if (this.readyState === 4 && this.status === 201) {
-                const post = document.createElement("p");
-                post.innerHTML = json['post']
-                post.className = 'post'
+                window.location.replace('/newsfeed');
             } else if (this.readyState === 4 && this.status === 404) {
                 alert("Could not add post")
             }

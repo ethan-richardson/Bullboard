@@ -83,6 +83,7 @@ app.add_routes([
     web.get('/edit', get_handler),
     web.get('/messages', get_handler),
     web.get('/map', get_handler),
+    web.post('/add_post', post_handler)
 ])
 # Run the server
 web.run_app(app)

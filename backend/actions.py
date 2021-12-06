@@ -79,6 +79,8 @@ def create_account(request, data):
 #Loads newsfeed
 def newsfeed(request):
     body = file.read_file(read_file_string + "frontend/pages/newsfeed.html")
+    newsfeed_elements = functions.create_post_elements()
+    body = body.replace(b'{{posts}}', newsfeed_elements.encode())
     response_code = 200
     content_type = "text/html"
     return [body, response_code, content_type]
@@ -99,13 +101,24 @@ def profile(request):
 
 
 def add_post(request, data):
-    return
+    token = request.cookies.get('token')
+    if token:
+        user = database.retrieve_user(token)
+        if user:
+            database.add_post(user, data)
+            response_code = 201
+            content_type = "text/html"
+            return [b"", b"Post created", response_code, content_type]
+        else:
+            return [b"", b"You must log in", 403, "text/plain"]
+    else:
+        return [b"", b"You must log in", 403, "text/plain"]
 
 def edit_profile(request, data):
     token = request.cookies.get('token')
     if token:
-        body = functions.load_profile(token)
-        if body:
+        user = database.retrieve_user(token)
+        if user:
             image_string = functions.add_image(data['picture'])
             database.update_profile(data, image_string, token)
             response_code = 200
@@ -115,3 +128,5 @@ def edit_profile(request, data):
             return [b"", b"You must log in", 403, "text/plain"]
     else:
         return [b"", b"You must log in", 403, "text/plain"]
+
+
