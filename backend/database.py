@@ -1,19 +1,21 @@
 import bcrypt
+import pymongo
 from pymongo import MongoClient
 import functions
+import datetime
 
 # TODO: Change from localhost to mongo
-mongoString = "mongodb://localhost:27017"
+mongo_string = "mongodb://localhost:27017"
 
 def connect():
-    client = MongoClient(mongoString)
+    client = MongoClient(mongo_string)
     return client.bullboard
 
 def verify_login(user_info):
     db = connect()
     found_user = db.users.find_one({'Email': user_info['email']})
     # User Exists
-    if user_info:
+    if found_user:
         # Password matches
         if bcrypt.checkpw(user_info['password'].encode(), found_user['Password'].encode()):
             return True
@@ -39,10 +41,22 @@ def add_user(user_info):
             'Gym Rat': False,
             'Night Owl': False
         }
-    db.users.insert_one({'Email': user_info['email'], 'First Name': user_info['first'], 'Last Name': user_info['last'],
-                         'Picture': '', 'Token': '', 'Password': hashed_pw, 'Birthday': user_info['birthday'], 'Major':
-                         '', 'Standing': user_info['standing'], 'Traits': traits, 'Budget': '', 'Housing Status': '',
-                         'Hometown': ''})
+    json = {
+        'Email': functions.html_escaper(user_info['email']),
+        'First Name': functions.html_escaper(user_info['first']),
+        'Last Name': functions.html_escaper(user_info['last']),
+        'Picture': '',
+        'Token': '',
+        'Password': hashed_pw,
+        'Birthday': functions.html_escaper(user_info['birthday']),
+        'Major': '',
+        'Standing': functions.html_escaper(user_info['standing']),
+        'Traits': traits,
+        'Budget': 0,
+        'Housing Status': '',
+        'Hometown': ''
+    }
+    db.users.insert_one(json)
     return
 
 
@@ -60,6 +74,51 @@ def retrieve_user(token):
     result = db.users.find_one({"Token": token})
     return result
 
-# def add_post():
+def update_profile(data, image_name, token):
+    update_json = construct_update_json(data, image_name)
+    token = functions.hash_token(token)
+    db = connect()
+    db.users.update_one({'Token': token}, {'$set': update_json})
 
+
+def construct_update_json(data, image_name):
+    traits = {
+            'UB Athlete': data['traits']['athlete'],
+            'Scholar': data['traits']['scholar'],
+            'Early Riser': data['traits']['earlyRiser'],
+            'Pride': data['traits']['pride'],
+            'Foodie': data['traits']['foodie'],
+            'Pet Owner': data['traits']['petOwner'],
+            'Car Owner': data['traits']['carOwner'],
+            'Gamer': data['traits']['gamer'],
+            'Gym Rat': data['traits']['workout'],
+            'Night Owl': data['traits']['nightOwl']
+        }
+    json = {
+        'Budget': data['budget'],
+        'Major': functions.html_escaper(data['major']),
+        'Standing': functions.html_escaper(data['standing']),
+        'Housing Status': functions.html_escaper(data['status']),
+        'Traits': traits
+    }
+    if image_name != '':
+        json['Picture'] = image_name
+    return json
+
+
+def add_post(user, post):
+    db = connect()
+    json = {
+        'First Name': user['First Name'],
+        'Last Name': user['Last Name'],
+        'Post': functions.html_escaper(post['post']),
+        'Posted': datetime.datetime.now(),
+    }
+    db.posts.insert_one(json)
+    get_posts()
+
+def get_posts():
+    db = connect()
+    result = db.posts.find().sort('Posted', pymongo.DESCENDING)
+    return result
 

@@ -9,6 +9,10 @@ get_routes = {
     "/styles.css": actions.resp_to_html_paths,
     "/newsfeed": actions.newsfeed,
     "/profile": actions.profile,
+    "/edit": actions.edit,
+    "/map": actions.map,
+    "/messages": actions.messages
+
 }
 
 # Dictionary holding all possible POST requests
@@ -16,5 +20,5 @@ post_routes = {
     "/login_attempt": actions.login_attempt,
     "/create_account": actions.create_account,
     "/add_post": actions.add_post,
-    "/update_account": actions.update_account
+    "/edit_profile": actions.edit_profile,
 }
