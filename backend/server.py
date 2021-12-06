@@ -6,7 +6,6 @@ import database
 
 # Handle GET requests here
 async def get_handler(request):
-    database.fetch_all() # for debugging
     # Get all the routes associated with a GET request
     allGetRoutes = routes.get_routes
     # Call the action that is associated with the current request

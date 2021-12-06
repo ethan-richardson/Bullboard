@@ -122,8 +122,12 @@ def get_posts():
     result = db.posts.find().sort('Posted', pymongo.DESCENDING)
     return result
 
-def fetch_all():
+def fetch_logged():
     db = connect()
+    online = []
     collection = db.users.find({})
-    return collection
+    for doc in collection:
+        if len(doc["Token"]) != 0:
+            online.append(doc)
+    return online
 
