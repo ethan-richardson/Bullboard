@@ -122,3 +122,8 @@ def get_posts():
     result = db.posts.find().sort('Posted', pymongo.DESCENDING)
     return result
 
+def fetch_all():
+    db = connect()
+    collection = db.users.find({})
+    return collection
+

@@ -44,7 +44,7 @@ def edit(request):
 
 # Serves the newsfeed with posts
 def newsfeed(request):
-    body = file.read_file(read_file_string + "frontend/pages/newsfeed.html")
+    body = functions.load_newsfeed_profile(request.cookies.get('token'))
     newsfeed_elements = functions.create_post_elements()
     body = body.replace(b'{{posts}}', newsfeed_elements.encode())
     response_code = 200
@@ -98,42 +98,42 @@ def create_account(request, data):
     else:
         return [b"", b"Password does not meet all requirements or does not match", 404, "text/plain"]
 
-#Loads newsfeed
-def newsfeed(request):
-    body = file.read_file_as_list(read_file_string + "frontend/pages/newsfeed.html")
-    authenticated = []
-    idx = body.index('    <div id="list">\n')
-    collection = database.fetch_all()
-    for doc in collection:
-        if len(doc["Token"]) != 0:
-            authenticated.append(doc["Email"])
-            # TODO - Insert HTML here in newsfeed page.
-    for user in authenticated:
-        if user not in body[idx+1]:
-           body[idx+1] = user + body[idx+1]
-    encoded = ''.join(ele for ele in body).encode()
-    response_code = 200
-    content_type = "text/html"
-    return [encoded, response_code, content_type]
-
-#Loads user profile
-def profile(request):
+# Handles adding newsfeed post
+def add_post(request, data):
     token = request.cookies.get('token')
-    if token:
-        body = functions.load_profile(token)
-        if body:
-            response_code = 200
-            content_type = "text/html"
-            return [body, response_code, content_type]
-        else:
-            return [b"", b"You must log in", 403, "text/plain"]
+    user = functions.get_user(token)
+    if user:
+        database.add_post(user, data)
+        response_code = 201
+        content_type = "text/html"
+        return [b"", b"Post created", response_code, content_type]
     else:
         return [b"", b"You must log in", 403, "text/plain"]
 
 
-def add_post(request):
-    return
+# Handles profile editing
+def edit_profile(request, data):
+    token = request.cookies.get('token')
+    user = functions.get_user(token)
+    if user:
+        image_string = functions.add_image(data['picture'])
+        database.update_profile(data, image_string, token)
+        response_code = 200
+        content_type = "text/plain"
+        return [b"", b"Profile Updated", response_code, content_type]
+    else:
+        return [b"", b"You must log in", 403, "text/plain"]
 
-def update_account(request):
 
-    return
+# Handles direct message sending
+def send_message(request, data):
+    print(data)
+    token = request.cookies.get('token')
+    user = functions.get_user(token)
+    if user:
+        # TODO: Add direct message logic here
+        response_code = 200
+        content_type = "text/plain"
+        return [b"", b"Message added", response_code, content_type]
+    else:
+        return [b"", b"You must log in", 403, "text/plain"]
