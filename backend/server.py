@@ -6,7 +6,6 @@ import database
 
 # Handle GET requests here
 async def get_handler(request):
-    print(request.path)
     # Get all the routes associated with a GET request
     allGetRoutes = routes.get_routes
     # Call the action that is associated with the current request
@@ -23,10 +22,9 @@ async def get_handler(request):
 # Handle POST requests here
 async def post_handler(request):
     data = await request.json()
-    # data = data.decode('utf-8')
     allPostRoutes = routes.post_routes
     action = allPostRoutes[request.path]
-    response = action(data)
+    response = action(request, data)
     # Send a server response
     return web.Response(
         headers=response[0],
@@ -58,7 +56,6 @@ async def websocket_handler(request):
     return ws
 
 async def image_handler(request):
-    # if request.path.startswith("images/"):
     headers = actions.resp_to_html_paths(request)
     return web.Response(
         body=headers[0],
@@ -73,6 +70,7 @@ app.add_routes([
     web.get('/login', get_handler),
     web.get('/', get_handler),
     web.get('/images/{name}', image_handler),
+    web.get('/images/prof_pics/{name}', image_handler),
     web.get('/register', get_handler),
     web.get('/functions.js', get_handler),
     web.get('/styles.css', get_handler),
@@ -80,7 +78,11 @@ app.add_routes([
     web.post('/create_account', post_handler),
     web.get('/websocket', websocket_handler),
     web.get('/newsfeed', get_handler),
-    web.get('/profile', get_handler)
+    web.get('/profile', get_handler),
+    web.post('/edit_profile', post_handler),
+    web.get('/edit', get_handler),
+    web.get('/messages', get_handler),
+    web.get('/map', get_handler),
 ])
 # Run the server
 web.run_app(app)

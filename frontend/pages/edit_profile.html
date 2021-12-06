@@ -22,11 +22,11 @@
 <body>
     <nav>
         <ul>
-            <li><a href="newsfeed.html">HOME</a></li>
-            <li><a class="active" href="profile.html">PROFILE</a></li>
-            <li><a href="direct_messages.html">MESSAGES</a></li>
-            <li><a href="live_map.html">MAP</a></li>
-            <li style="float:right"><a href="index.html">LOG OUT</a></li>
+            <li><a href="/newsfeed">HOME</a></li>
+            <li><a class="active" href="/profile">PROFILE</a></li>
+            <li><a href="/messages">MESSAGES</a></li>
+            <li><a href="/map">MAP</a></li>
+            <li style="float:right"><a href="/">LOG OUT</a></li>
         </ul>
     </nav>
 
@@ -47,11 +47,11 @@
                 <select class="inputBox2" id="status" name="status">
                     <option value="" selected disabled hidden>I'm looking for...</option>
                     <option value="a roommate">A Roommate</option>
-                    <option value="mulltiple roommates">Multiple Roommates</option>
-                    <option value="north campus housing">North Campus Housing</option>
-                    <option value="south campus housing">South Campus Housing</option>
-                    <option value="off campus housing">Off Campus Housing</option>
-                    <option value="any housing">Any Housing</option>
+                    <option value="Multiple Roommates">Multiple Roommates</option>
+                    <option value="North Campus Housing">North Campus Housing</option>
+                    <option value="South Campus Housing">South Campus Housing</option>
+                    <option value="Off Campus Housing">Off Campus Housing</option>
+                    <option value="Any Housing">Any Housing</option>
                 </select>
             <br>
             <label for="major" style="font-size: 20px; line-height: 28px;">Major: </label> 
@@ -66,7 +66,7 @@
             <br>
             <input type="range" name="range" min="0" max="2000" step="50" value="1000" class="slider" id="budget">
             <p>
-                Drag the slider to select your maximum montly allowance ($USD)
+                Drag the slider to select your maximum monthly allowance ($USD)
             </p>
         </div>
         <br>
@@ -127,10 +127,10 @@
             </div>
         </div>
         <br>
-        <button id="updateButton">Update Profile</button>
+        <button id="updateButton" onclick="processUpdate()">Update Profile</button>
 
     </div>
-
+    <script src="functions.js"></script>
     <script>
         var slider = document.getElementById("budget");
         var output = document.getElementById("demo");

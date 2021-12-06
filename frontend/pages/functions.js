@@ -1,4 +1,4 @@
-const socket = new WebSocket('ws://' + window.location.host + '/websocket');
+// const socket = new WebSocket('ws://' + window.location.host + '/websocket');
 
 //Generates registration json string
 function registrationJSON() {
@@ -73,33 +73,66 @@ function processLogin() {
 }
 
 //Generates update profile json string
-function updateJSON() {
-    var budget = document.getElementById("budget");
+async function updateJSON() {
+    var budget = parseInt(document.getElementById("budget"));
     var standing = document.getElementById("standing");
     var status = document.getElementById("status");
     var major = document.getElementById("major");
+    var profPic = document.getElementById("profilePicture");
+    var selectedTraits = getTraits();
     var jsonMap = {
         budget: budget.value,
         major: major.value,
         status: status.value,
-        standing: standing.value
+        standing: standing.value,
+        traits: selectedTraits,
     };
+    if(profPic.files.length > 0) {
+        await getBase64(profPic.files[0]).then(
+            function(result) {
+                jsonMap["picture"] = {name: profPic.files[0].name, image: result};
+            });
+    }
+    else {
+        jsonMap["picture"] = {name: "", image: ""};
+    }
     return JSON.stringify(jsonMap);
 }
 
+function getTraits() {
+    var traitIDs = ['athlete', 'scholar', 'nightOwl', 'earlyRiser', 'gamer', 'carOwner', 'petOwner', 'pride', 'foodie',
+    'workout']
+    var traitOutput = {}
+    for(var i = 0; i < traitIDs.length; i++) {
+        var currentTrait = traitIDs[i]
+        traitOutput[currentTrait] = document.getElementById(currentTrait).checked;
+    }
+    return traitOutput;
+}
+
+
+function getBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+}
+
 //Sends user profile changes to server
-function processUpdate() {
-    const json = updateJSON();
+async function processUpdate() {
+    const json = await updateJSON();
     if (json !== "") {
         const request = new XMLHttpRequest();
         request.onreadystatechange = function () {
             if (this.readyState === 4 && this.status === 200) {
-                window.location.replace('/profile')
+                window.location.assign('/profile')
             } else if (this.readyState === 4 && this.status === 404) {
-                feedback.innerHTML = "Invalid Login";
+                alert('changes could not be made')
             }
         };
-        request.open("POST", "/update_account");
+        request.open("POST", "/edit_profile");
         request.send(json);
     }
 }
