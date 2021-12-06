@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gruppo&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Emblema+One&family=Gruppo&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- style sheet -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- tab name -->
+    <title>Live Map</title>
+</head>
+
+<body style="margin: 0">
+    <div id="map" style="width: 100vw; height: 100vh"></div>
+    <script src="http://js.api.here.com/v3/3.0/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
+    <script src="http://js.api.here.com/v3/3.0/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
+    <script src="http://js.api.here.com/v3/3.0/mapsjs-mapevents.js" type="text/javascript" charset="utf-8"></script>
+    <script src="http://cdnjs.cloudflar.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+    <script>
+        const platform = new H.service.Platform({
+            "apikey": "9JAT6Jxt1yNZEhq9H5s4",
+        });
+        const defaultMapLayers = platform.createDefaultLayers();
+        const map = new H.Map(
+            document.getElementById("map"),
+            defaultMapLayers.normal.map,
+            {
+                zoom: 13,
+                center: { lat: 43.0027, lng: -78.7847}
+            }
+        );
+        const mapEvents = new H.mapevents.MapEvents(map);
+        const behavior = new H.mapevents.Behavior(mapEvents);
+        const socket = io("http://localhost:3000");
+        
+        socket.on("marker", data => {
+            console.log("marker")
+            const marker = new H.map.Marker(data);
+            console.log(marker);
+            map.addObject(marker);
+        });
+        map.addEventListener("tap", event => {
+            console.log("tap")
+            const position = map.screenToGeo(
+                event.currentPointer.viewportX,
+                event.currentPointer.viewportY
+            );
+            const marker = new H.map.Marker(position);
+            console.log(marker);
+            map.addObject(marker);
+            socket.emit("marker", position);
+        });
+    </script>
+
+    <nav>
+        <ul>
+            <li><a href="newsfeed.html">HOME</a></li>
+            <li><a href="profile.html">PROFILE</a></li>
+            <li><a href="direct_messages.html">MESSAGES</a></li>
+            <li><a class="active" href="live_map.html">MAP</a></li>
+            <li style="float:right"><a href="index.html">LOG OUT</a></li>
+        </ul>
+    </nav>
+    
+</body>
+
+<footer>
+    <p>
+        BULLBOARD <br>
+        Developed by Lauren Richardson, Jay Hou, Ethan Richardson, Cindy Cheng, Zayaan Rahman <br>
+        December 2021
+    </p>
+</footer>
+
+</html>
