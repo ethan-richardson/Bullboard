@@ -15,6 +15,10 @@
     
     <!-- style sheet -->
     <link rel="stylesheet" href="styles.css">
+<<<<<<< HEAD
+=======
+    <script src="functions.js"></script>
+>>>>>>> 6101b612dcf75d512858566810c49dc2fd1f981e
     <!-- tab name -->
     <title>Newsfeed</title>
 </head>
@@ -22,6 +26,7 @@
 <body>
     <nav>
         <ul>
+<<<<<<< HEAD
             <li><a class="active" href="newsfeed.html">HOME</a></li>
             <li><a href="profile.html">PROFILE</a></li>
             <li><a href="direct_messages.html">MESSAGES</a></li>
@@ -39,12 +44,56 @@
     
 </body>
 
+=======
+            <li><a class="active" href="/newsfeed">HOME</a></li>
+            <li><a href="/profile">PROFILE</a></li>
+            <li><a href="/messages">MESSAGES</a></li>
+            <li><a href="/map">MAP</a></li>
+            <li style="float:right"><a href="/">LOG OUT</a></li>
+        </ul>
+    </nav>
+    <div class="grid-container">
+        <div class="profile">
+            <img id="profPic2" src="/pages/images/VictorEBull.png" alt="Profile Picture">
+            <h2>Welcome, {{name}}!</h2>
+        </div>
+
+        <div class="activeUsers">
+            <h3 style="text-align: center; border: solid; padding: 5px; border-width: 2px; background-color: rgb(148, 148, 148);">Active Users</h3>
+            <br>
+            <div id="userList">
+                {{activeUser}}
+            </div>
+        </div>
+    
+        <div class="createPost">
+            <label for="post">Create new post:</label><br>
+            <span role="textbox" class="spanBox" id="post" contenteditable></span>
+            <button  value="submit" type="submit" onclick="processPost()">SEND</button>
+            <br>
+            <br>
+            <hr>
+        </div>
+
+        <div class="newsfeed">
+            <h1 style="text-align: center;">Newsfeed</h1>
+            {{posts}}
+        </div>
+    </div>
+
+</body>
+<!-- 
+>>>>>>> 6101b612dcf75d512858566810c49dc2fd1f981e
 <footer>
     <p>
         BULLBOARD <br>
         Developed by Lauren Richardson, Jay Hou, Ethan Richardson, Cindy Cheng, Zayaan Rahman <br>
         December 2021
     </p>
+<<<<<<< HEAD
 </footer>
+=======
+</footer> -->
+>>>>>>> 6101b612dcf75d512858566810c49dc2fd1f981e
 
 </html>

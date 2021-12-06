@@ -73,33 +73,67 @@ function processLogin() {
 }
 
 //Generates update profile json string
-function updateJSON() {
+async function updateJSON() {
     var budget = document.getElementById("budget");
     var standing = document.getElementById("standing");
     var status = document.getElementById("status");
     var major = document.getElementById("major");
+    var profPic = document.getElementById("profilePicture");
+    var selectedTraits = getTraits();
+    budget = (parseInt(budget.value));
     var jsonMap = {
-        budget: budget.value,
+        budget: budget,
         major: major.value,
         status: status.value,
-        standing: standing.value
+        standing: standing.value,
+        traits: selectedTraits,
     };
+    if(profPic.files.length > 0) {
+        await getBase64(profPic.files[0]).then(
+            function(result) {
+                jsonMap["picture"] = {name: profPic.files[0].name, image: result};
+            });
+    }
+    else {
+        jsonMap["picture"] = {name: "", image: ""};
+    }
     return JSON.stringify(jsonMap);
 }
 
+function getTraits() {
+    var traitIDs = ['athlete', 'scholar', 'nightOwl', 'earlyRiser', 'gamer', 'carOwner', 'petOwner', 'pride', 'foodie',
+    'workout']
+    var traitOutput = {}
+    for(var i = 0; i < traitIDs.length; i++) {
+        var currentTrait = traitIDs[i]
+        traitOutput[currentTrait] = document.getElementById(currentTrait).checked;
+    }
+    return traitOutput;
+}
+
+
+function getBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+}
+
 //Sends user profile changes to server
-function processUpdate() {
-    const json = updateJSON();
+async function processUpdate() {
+    const json = await updateJSON();
     if (json !== "") {
         const request = new XMLHttpRequest();
         request.onreadystatechange = function () {
             if (this.readyState === 4 && this.status === 200) {
-                window.location.replace('/profile')
+                window.location.assign('/profile')
             } else if (this.readyState === 4 && this.status === 404) {
-                feedback.innerHTML = "Invalid Login";
+                alert('changes could not be made')
             }
         };
-        request.open("POST", "/update_account");
+        request.open("POST", "/edit_profile");
         request.send(json);
     }
 }
@@ -107,24 +141,51 @@ function processUpdate() {
 //Generates post adding json string
 function addPostJSON() {
     var post = document.getElementById("post");
-    return JSON.stringify({'post': post});
+    return JSON.stringify({'post': post.innerHTML});
 }
 
 //Sends post info to server
 function processPost() {
     const json = addPostJSON();
+    console.log(json)
     if (json !== "") {
         const request = new XMLHttpRequest();
         request.onreadystatechange = function () {
             if (this.readyState === 4 && this.status === 201) {
-                const post = document.createElement("p");
-                post.innerHTML = json['post']
-                post.className = 'post'
+                window.location.replace('/newsfeed');
             } else if (this.readyState === 4 && this.status === 404) {
                 alert("Could not add post")
             }
         };
         request.open("POST", "/add_post");
+        request.send(json);
+    }
+}
+
+
+//Generates post adding json string
+function sendMessageJSON() {
+    const post = document.getElementById("message");
+    const recipient = document.getElementById("recipient");
+    const message = post.innerHTML;
+    post.innerHTML = "";
+    return JSON.stringify({'Message': message, 'Recipient': recipient.innerHTML});
+}
+
+
+function processMessage() {
+    const json = sendMessageJSON();
+    console.log(json)
+    if (json !== "") {
+        const request = new XMLHttpRequest();
+        request.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 201) {
+                // window.location.replace('/newsfeed');
+            } else if (this.readyState === 4 && this.status === 404) {
+                alert("Could not add post")
+            }
+        };
+        request.open("POST", "/send_message");
         request.send(json);
     }
 }

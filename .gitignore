@@ -1,3 +1,5 @@
 .idea
 .DS_STORE
 venv
+frontend/pages/images/prof_pics/*
+!frontend/pages/images/prof_pics/default.png

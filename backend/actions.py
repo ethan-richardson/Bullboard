@@ -3,20 +3,64 @@ import file
 import database
 import functions
 
-#Change .. to Bullboard when finished
+#Change this based on your file extensions
+read_file_string = "../"
 
-# change to Bullboard when running locally, use ./ when running on Docker
-read_file_string = "./"
-
+# Serves the login page
 def login(request):
     body = file.read_file(read_file_string + "frontend/pages/index.html")
     response_code = 200
     content_type = "text/html"
     return [body, response_code, content_type]
 
-# We want to serve the register page here.
+# Serves the registration page
 def register(request):
     body = file.read_file(read_file_string + "frontend/pages/create_account.html")
+    response_code = 200
+    content_type = "text/html"
+    return [body, response_code, content_type]
+
+# Serves respective user profile
+def profile(request):
+    token = request.cookies.get('token')
+    if token:
+        body = functions.load_profile(token)
+        if body:
+            response_code = 200
+            content_type = "text/html"
+            return [body, response_code, content_type]
+        else:
+            return [b"", b"You must log in", 403, "text/plain"]
+    else:
+        return [b"", b"You must log in", 403, "text/plain"]
+
+# Serves the edit profile page
+def edit(request):
+    body = file.read_file(read_file_string + "frontend/pages/edit_profile.html")
+    response_code = 200
+    content_type = "text/html"
+    return [body, response_code, content_type]
+
+
+# Serves the newsfeed with posts
+def newsfeed(request):
+    body = file.read_file(read_file_string + "frontend/pages/newsfeed.html")
+    newsfeed_elements = functions.create_post_elements()
+    body = body.replace(b'{{posts}}', newsfeed_elements.encode())
+    response_code = 200
+    content_type = "text/html"
+    return [body, response_code, content_type]
+
+# Serves the interactive map
+def map(request):
+    body = file.read_file(read_file_string + "frontend/pages/live_map.html")
+    response_code = 200
+    content_type = "text/html"
+    return [body, response_code, content_type]
+
+# Serves the direct messages
+def messages(request):
+    body = file.read_file(read_file_string + "frontend/pages/direct_messages.html")
     response_code = 200
     content_type = "text/html"
     return [body, response_code, content_type]
@@ -35,7 +79,8 @@ def resp_to_html_paths(request):
     else:
         return [body, response_code, "image/jpeg"]
 
-def login_attempt(data):
+# Handles login attempts
+def login_attempt(request, data):
     if database.verify_login(data):
         #Create login token on successful login
         token = functions.login_token()
@@ -45,7 +90,8 @@ def login_attempt(data):
     else:
         return ["", b"Content Not Found", 404, "text/plain"]
 
-def create_account(data):
+# Handles account creation
+def create_account(request, data):
     if functions.verify_password(data['password'], data['rePassword']):
         database.add_user(data)
         return [b"", b"User Added", 201, "text/plain"]

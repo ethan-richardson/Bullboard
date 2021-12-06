@@ -15,6 +15,7 @@
     
     <!-- style sheet -->
     <link rel="stylesheet" href="styles.css">
+    <script src="functions.js"></script>
     <!-- tab name -->
     <title>Direct Messages</title>
 </head>
@@ -22,14 +23,19 @@
 <body>
     <nav>
         <ul>
-            <li><a href="newsfeed.html">HOME</a></li>
-            <li><a href="profile.html">PROFILE</a></li>
-            <li><a class="active" href="direct_messages.html">MESSAGES</a></li>
-            <li><a href="live_map.html">MAP</a></li>
-            <li style="float:right"><a href="index.html">LOG OUT</a></li>
+            <li><a href="/newsfeed">HOME</a></li>
+            <li><a href="/profile">PROFILE</a></li>
+            <li><a class="active" href="/messages">MESSAGES</a></li>
+            <li><a href="/map">MAP</a></li>
+            <li style="float:right"><a href="/">LOG OUT</a></li>
         </ul>
     </nav>
 
+    <div class="directMessages">
+        <p id="recipient">Lauren Richardson</p>
+        <span role="textbox" class="spanBox" id="message" contenteditable></span>
+        <button type="submit" onclick="processMessage()">SEND</button>
+    </div>
     
 </body>
 

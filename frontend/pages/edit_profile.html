@@ -22,17 +22,128 @@
 <body>
     <nav>
         <ul>
-            <li><a href="newsfeed.html">HOME</a></li>
-            <li><a class="active" href="profile.html">PROFILE</a></li>
-            <li><a href="direct_messages.html">MESSAGES</a></li>
-            <li><a href="live_map.html">MAP</a></li>
-            <li style="float:right"><a href="index.html">LOG OUT</a></li>
+            <li><a href="/newsfeed">HOME</a></li>
+            <li><a class="active" href="/profile">PROFILE</a></li>
+            <li><a href="/messages">MESSAGES</a></li>
+            <li><a href="/map">MAP</a></li>
+            <li style="float:right"><a href="/">LOG OUT</a></li>
         </ul>
     </nav>
 
+
+    <div id="updateBox">
+        <h1 style="margin-top: 0px;">Update your profile!</h1>
+        <br><br>
+        <div style="text-align: right; width:max-content; margin: auto;">
+            <label required for="standing" style="font-size: 20px; line-height: 28px;">Student Standing: </label>
+                <select class="inputBox2" id="standing" name="standing">
+                    <option value="" selected disabled hidden>Please select your current standing</option>
+                    <option value="Undergrad">Undergrad</option>
+                    <option value="Grad">Grad</option>
+                    <option value="PhD">PhD</option>
+                </select>
+            <br>
+            <label required for="status" style="font-size: 20px; line-height: 28px;">Current Status: </label>
+                <select class="inputBox2" id="status" name="status">
+                    <option value="" selected disabled hidden>I'm looking for...</option>
+                    <option value="a roommate">A Roommate</option>
+                    <option value="Multiple Roommates">Multiple Roommates</option>
+                    <option value="North Campus Housing">North Campus Housing</option>
+                    <option value="South Campus Housing">South Campus Housing</option>
+                    <option value="Off Campus Housing">Off Campus Housing</option>
+                    <option value="Any Housing">Any Housing</option>
+                </select>
+            <br>
+            <label for="major" style="font-size: 20px; line-height: 28px;">Major: </label> 
+            <input class="inputBox2" style="width: 385px; height: 23px;" type="text" placeholder="Type your degree" name="major" id="major">
+            <br>
+            <label for="profilePicture" style="font-size: 20px; line-height: 28px;">Upload Profile Picture:</label> 
+            <input class="inputBox2" type="file" name="profilePicture" accept="image/*" id="profilePicture">
+        </div>
+        <br>
+        <div class="slidecontainer">
+            <label for="budget" style="font-size: 20px;">Max Budget: $<span id="maxBudget"></span> per month</label>
+            <br>
+            <input type="range" name="range" min="0" max="2000" step="50" value="1000" class="slider" id="budget">
+            <p>
+                Drag the slider to select your maximum monthly allowance ($USD)
+            </p>
+        </div>
+        <br>
+        <label style="font-size: 20px;">Select your personality traits (Check all that apply):</label>
+        <div style="text-align: center; width:max-content; margin: auto;">
+            <div class="traitDiv" >
+                <br>
+                <input type="checkbox" id="athlete" name="athlete" value="athlete">
+                <label class="traitNames" for="athlete">
+                    UB Athlete<br><img class="icon" src="images/athleteIcon.png" alt="Athlete Icon">
+                </label>
+                <br>
+                <input type="checkbox" id="scholar" name="scholar" value="scholar">
+                <label class="traitNames" for="scholar">
+                    Scholar<br><img class="icon" src="images/scholarIcon.png" alt="Scholar Icon">
+                </label>
+                <br>
+                <input type="checkbox" id="nightOwl" name="nightOwl" value="nightOwl">
+                <label class="traitNames" for="nightOwl">
+                    Night Owl<br><img class="icon" src="images/nightOwlIcon.png" alt="Night Owl Icon">
+                </label>
+                <br>
+                <input type="checkbox" id="earlyRiser" name="earlyRiser" value="earlyRiser">
+                <label class="traitNames" for="earlyRiser">
+                    Early Riser<br><img class="icon" src="images/earlyRiserIcon.png" alt="Early Riser Icon">
+                </label>
+                <br>
+                <input type="checkbox" id="gamer" name="gamer" value="gamer">
+                <label class="traitNames" for="gamer">
+                    Gamer<br><img class="icon" src="images/gamerIcon.png" alt="Gamer Icon">
+                </label>
+            </div>
+            <div class="traitDiv">
+                <input type="checkbox" id="carOwner" name="carOwner" value="carOwner">
+                <label class="traitNames" for="carOwner">
+                    Car Owner<br><img class="icon" src="images/carOwnerIcon.png" alt="Car Owner Icon">
+                </label>
+                <br>
+                <input type="checkbox" id="petOwner" name="petOwner" value="petOwner">
+                <label class="traitNames" for="petOwner">
+                    Pet Owner<br><img class="icon" src="images/petOwnerIcon.png" alt="Pet Owner Icon">
+                </label>
+                <br>
+                <input type="checkbox" id="pride" name="pride" value="pride">
+                <label class="traitNames" for="pride">
+                    LGBTQ+<br><img class="icon" src="images/prideIcon.png" alt="Pride Icon">
+                </label>
+                <br>
+                <input type="checkbox" id="foodie" name="foodie" value="foodie">
+                <label class="traitNames" for="foodie">
+                    Foodie<br><img class="icon" src="images/foodieIcon.png" alt="Foodie Icon">
+                </label>
+                <br>
+                <input type="checkbox" id="workout" name="workout" value="workout">
+                <label class="traitNames" for="workout">
+                    Gym Rat<br><img class="icon" src="images/workoutIcon.png" alt="Workout Icon">
+                </label>
+            </div>
+        </div>
+        <br>
+        <button id="updateButton" onclick="processUpdate()">Update Profile</button>
+
+    </div>
+    <script src="functions.js"></script>
+    <script>
+        var slider = document.getElementById("budget");
+        var output = document.getElementById("maxBudget");
+        output.innerHTML = slider.value;
+        
+        slider.oninput = function() {
+          output.innerHTML = this.value;
+        }
+    </script>
     
 </body>
-
+<br>
+<br>
 <footer>
     <p>
         BULLBOARD <br>
