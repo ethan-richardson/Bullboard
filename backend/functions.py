@@ -9,6 +9,9 @@ import time
 from datetime import date
 from base64 import b64decode
 
+#Change this based on your file extensions
+read_file_string = "./"
+
 # Verifies password requirements are satisfied
 def verify_password(password, password2):
     if password != password2:
@@ -46,7 +49,7 @@ def html_escaper(text):
 def load_profile(token):
     user = database.retrieve_user(token)
     if user:
-        body = file.read_file("../frontend/pages/profile.html")
+        body = file.read_file(read_file_string + "frontend/pages/profile.html")
         body = body.replace(b'{{First Name}}', user['First Name'].encode())
         body = body.replace(b'{{Last Name}}', user['Last Name'].encode())
         body = body.replace(b'{{Standing}}', user['Standing'].encode())
@@ -60,6 +63,27 @@ def load_profile(token):
         else:
             body = body.replace(b'{{Prof Pic}}', b'/images/prof_pics/' + user['Picture'].encode())
         body = body.replace(b'{{Traits}}', create_trait_image_tags(user['Traits']))
+        return body
+    else:
+        return False
+
+# Loads user profile for newsfeed
+def load_newsfeed_profile(token):
+    user = database.retrieve_user(token)
+    if user:
+        body = file.read_file(read_file_string + "frontend/pages/newsfeed.html")
+        body = body.replace(b'{{name}}', user['First Name'].encode())
+        if user['Picture'] == '':
+            body_as_list = file.read_file_as_list(read_file_string + "frontend/pages/newsfeed.html")
+            start_of_list = body_as_list.index('                {{activeUser}}\n')
+            body_as_list[start_of_list] = ''
+            online_users = database.fetch_logged()
+            for user in online_users: 
+                body_as_list[start_of_list] = f'<li>{user["Email"]}</li>' + body_as_list[start_of_list] + '\n'
+            updated_body = ''.join(ele for ele in body_as_list).encode()
+            body = updated_body.replace(b'{{Prof Pic}}', b'/images/prof_pics/default.png')
+        else:
+            body = body.replace(b'{{Prof Pic}}', b'/images/prof_pics/' + user['Picture'].encode())
         return body
     else:
         return False
@@ -113,7 +137,7 @@ def add_image(picture):
         comma_split = image_info.split(",", 1)
         encoded_string = comma_split[1]
         image_bytes = b64decode(encoded_string)
-        f = open("../frontend/pages/images/prof_pics/" + file_name, "wb")
+        f = open(read_file_string + "frontend/pages/images/prof_pics/" + file_name, "wb")
         f.write(image_bytes)
         f.close()
         return file_name
