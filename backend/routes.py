@@ -21,4 +21,5 @@ post_routes = {
     "/create_account": actions.create_account,
     "/add_post": actions.add_post,
     "/edit_profile": actions.edit_profile,
+    "/send_message": actions.send_message
 }

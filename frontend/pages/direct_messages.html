@@ -15,6 +15,7 @@
     
     <!-- style sheet -->
     <link rel="stylesheet" href="styles.css">
+    <script src="functions.js"></script>
     <!-- tab name -->
     <title>Direct Messages</title>
 </head>
@@ -30,6 +31,11 @@
         </ul>
     </nav>
 
+    <div class="directMessages">
+        <p id="recipient">Lauren Richardson</p>
+        <span role="textbox" class="spanBox" id="message" contenteditable></span>
+        <button type="submit" onclick="processMessage()">SEND</button>
+    </div>
     
 </body>
 

@@ -320,7 +320,7 @@ ul {
     grid-row: 2 / 8;
 }
 
-#post {
+.spanBox {
     display: inline-block;
     border: solid 1px black;
     min-width: 400px; 

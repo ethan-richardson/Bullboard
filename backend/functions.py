@@ -128,3 +128,13 @@ def create_post_elements():
         output += ('<p class=\"newsfeedPost\"><b>' + post['First Name'] + ' ' + post['Last Name'] + '</b>: ' +
                    post['Post'] + '</p>\n')
     return output
+
+def get_user(token):
+    if token:
+        user = database.retrieve_user(token)
+        if user:
+            return user
+        else:
+            return False
+    else:
+        return False
