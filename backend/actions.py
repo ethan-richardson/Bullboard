@@ -44,7 +44,7 @@ def edit(request):
 
 # Serves the newsfeed with posts
 def newsfeed(request):
-    body = file.read_file(read_file_string + "frontend/pages/newsfeed.html")
+    body = functions.load_newsfeed_profile(request.cookies.get('token'))
     newsfeed_elements = functions.create_post_elements()
     body = body.replace(b'{{posts}}', newsfeed_elements.encode())
     response_code = 200
@@ -100,7 +100,8 @@ def create_account(request, data):
 
 # Handles adding newsfeed post
 def add_post(request, data):
-    user = functions.get_user(request.cookies.get('token'))
+    token = request.cookies.get('token')
+    user = functions.get_user(token)
     if user:
         database.add_post(user, data)
         response_code = 201
@@ -112,7 +113,8 @@ def add_post(request, data):
 
 # Handles profile editing
 def edit_profile(request, data):
-    user = functions.get_user(request.cookies.get('token'))
+    token = request.cookies.get('token')
+    user = functions.get_user(token)
     if user:
         image_string = functions.add_image(data['picture'])
         database.update_profile(data, image_string, token)
@@ -126,7 +128,8 @@ def edit_profile(request, data):
 # Handles direct message sending
 def send_message(request, data):
     print(data)
-    user = functions.get_user(request.cookies.get('token'))
+    token = request.cookies.get('token')
+    user = functions.get_user(token)
     if user:
         # TODO: Add direct message logic here
         response_code = 200

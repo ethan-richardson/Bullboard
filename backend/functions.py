@@ -64,6 +64,20 @@ def load_profile(token):
     else:
         return false
 
+# Loads user profile for newsfeed
+def load_newsfeed_profile(token):
+    user = database.retrieve_user(token)
+    if user:
+        body = file.read_file("../frontend/pages/newsfeed.html")
+        body = body.replace(b'{{name}}', user['First Name'].encode())
+        if user['Picture'] == '':
+            body = body.replace(b'{{Prof Pic}}', b'/images/prof_pics/default.png')
+        else:
+            body = body.replace(b'{{Prof Pic}}', b'/images/prof_pics/' + user['Picture'].encode())
+        return body
+    else:
+        return false
+
 #Creates image tags for profile loading
 def create_trait_image_tags(traits):
     output = ""

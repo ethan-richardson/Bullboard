@@ -79,6 +79,7 @@ async function updateJSON() {
     var status = document.getElementById("status");
     var major = document.getElementById("major");
     var profPic = document.getElementById("profilePicture");
+    var hometown = document.getElementById("hometown");
     var selectedTraits = getTraits();
     budget = (parseInt(budget.value));
     var jsonMap = {
@@ -86,6 +87,7 @@ async function updateJSON() {
         major: major.value,
         status: status.value,
         standing: standing.value,
+        hometown: hometown.value,
         traits: selectedTraits,
     };
     if(profPic.files.length > 0) {
