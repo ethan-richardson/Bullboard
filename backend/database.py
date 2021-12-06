@@ -63,7 +63,6 @@ def retrieve_user(token):
 def fetch_all():
     db = connect()
     collection = db.users.find({})
-    for doc in collection:
-        print(doc,flush=True)
+    return collection
 
 # def add_post():
