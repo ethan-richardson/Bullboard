@@ -47,7 +47,8 @@ async def websocket_handler(request):
                 await ws.close()
             else:
                 # this will probably change
-                await ws.send_str(msg.data + '/answer')
+                #await ws.send_str(msg.data + '/newsfeed')
+                pass
         # If there is an exception, the socket will close
         elif msg.type == aiohttp.WSMsgType.ERROR:
             print('ws connection closed w/ exception %s' % ws.exception())
@@ -76,7 +77,7 @@ app.add_routes([
     web.post('/login_attempt', post_handler),
     web.post('/create_account', post_handler),
     web.get('/websocket', websocket_handler),
-    web.get('/newsfeed', get_handler),
+    web.get('/newsfeed', websocket_handler),
     web.get('/profile', get_handler)
 ])
 # Run the server
