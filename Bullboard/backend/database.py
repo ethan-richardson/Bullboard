@@ -123,3 +123,28 @@ def get_posts():
     result = db.posts.find().sort('Posted', pymongo.DESCENDING)
     return result
 
+def fetch_logged():
+    db = connect()
+    online = []
+    collection = db.users.find({})
+    for doc in collection:
+        if len(doc["Token"]) != 0:
+            online.append(doc)
+    return online
+
+def add_message(user, message):
+    db = connect()
+    print("MESSAGE")
+    print(message)
+    json = {
+        'Recipient': message['Recipient'],
+        'Message': functions.html_escaper(message['Message']),
+        'Sent': datetime.datetime.now(),
+    }
+    db.messages.insert_one(json)
+    get_messages()
+
+def get_messages():
+    db = connect()
+    result = db.messages.find().sort('Sent', pymongo.DESCENDING)
+    return result

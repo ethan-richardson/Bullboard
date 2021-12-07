@@ -132,6 +132,7 @@ def send_message(request, data):
     user = functions.get_user(token)
     if user:
         # TODO: Add direct message logic here
+        database.add_message(user, data)
         response_code = 200
         content_type = "text/plain"
         return [b"", b"Message added", response_code, content_type]
