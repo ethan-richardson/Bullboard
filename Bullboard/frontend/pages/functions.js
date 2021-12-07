@@ -36,6 +36,8 @@ function processRegistration() {
                 alert("Account Successfully Created!")
             }  else if (this.readyState === 4 && this.status === 404) {
                 feedback.innerHTML = "Password does not meet all requirements";
+            } else if (this.readyState === 4 && this.status === 401) {
+                feedback.innerHTML = "Email already in use, try logging in";
             }
         };
         request.open("POST", "/create_account");

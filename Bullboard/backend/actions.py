@@ -4,7 +4,7 @@ import database
 import functions
 
 #Change this based on your file extensions
-read_file_string = "../"
+read_file_string = ""
 
 # Serves the login page
 def login(request):
@@ -60,6 +60,7 @@ def map(request):
 
 # Serves the direct messages
 def messages(request):
+
     body = file.read_file(read_file_string + "frontend/pages/direct_messages.html")
     response_code = 200
     content_type = "text/html"
@@ -92,11 +93,14 @@ def login_attempt(request, data):
 
 # Handles account creation
 def create_account(request, data):
-    if functions.verify_password(data['password'], data['rePassword']):
-        database.add_user(data)
-        return [b"", b"User Added", 201, "text/plain"]
+    if database.verify_unused_email(data):
+        if functions.verify_password(data['password'], data['rePassword']):
+            database.add_user(data)
+            return [b"", b"User Added", 201, "text/plain"]
+        else:
+            return [b"", b"Password does not meet all requirements or does not match", 404, "text/plain"]
     else:
-        return [b"", b"Password does not meet all requirements or does not match", 404, "text/plain"]
+        return [b"", b"Email already in use, please login", 401, "text/plain"]
 
 # Handles adding newsfeed post
 def add_post(request, data):
@@ -127,7 +131,6 @@ def edit_profile(request, data):
 
 # Handles direct message sending
 def send_message(request, data):
-    print(data)
     token = request.cookies.get('token')
     user = functions.get_user(token)
     if user:

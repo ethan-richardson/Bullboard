@@ -1,15 +1,24 @@
 import bcrypt
 import pymongo
+import datetime
 from pymongo import MongoClient
 import functions
-import datetime
 
-# TODO: Change from localhost to mongo
-mongo_string = "mongodb://mongo:27017"
+# TODO: Change from localhost to mongo when using docker, use localhost when running locally
+mongoString = "mongodb://mongo:27017"
 
 def connect():
-    client = MongoClient(mongo_string)
+    client = MongoClient(mongoString)
     return client.bullboard
+
+#for direct messages, make emails and username unique
+def verify_unused_email(user_info):
+    db = connect()
+    found_user = db.users.find_one({'Email': user_info['email']})
+    if found_user:
+        return False
+    else:
+        return True
 
 def verify_login(user_info):
     db = connect()
@@ -99,7 +108,6 @@ def construct_update_json(data, image_name):
         'Major': functions.html_escaper(data['major']),
         'Standing': functions.html_escaper(data['standing']),
         'Housing Status': functions.html_escaper(data['status']),
-        'Hometown': functions.html_escaper(data['hometown']),
         'Traits': traits
     }
     if image_name != '':
@@ -123,12 +131,22 @@ def get_posts():
     result = db.posts.find().sort('Posted', pymongo.DESCENDING)
     return result
 
+def fetch_logged():
+    db = connect()
+    online = []
+    collection = db.users.find({})
+    for doc in collection:
+        if len(doc["Token"]) != 0:
+            online.append(doc)
+    return online
+
+
 
 def add_message(user, message):
     db = connect()
-    print("MESSAGE")
-    print(message)
+
     json = {
+        'Sender': user['First Name'] + " " + user['Last Name'],
         'Recipient': message['Recipient'],
         'Message': functions.html_escaper(message['Message']),
         'Sent': datetime.datetime.now(),
@@ -140,3 +158,4 @@ def get_messages():
     db = connect()
     result = db.messages.find().sort('Sent', pymongo.DESCENDING)
     return result
+

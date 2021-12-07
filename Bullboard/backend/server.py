@@ -4,7 +4,6 @@ import routes
 import actions
 import database
 
-
 # Handle GET requests here
 async def get_handler(request):
     # Get all the routes associated with a GET request
@@ -13,13 +12,13 @@ async def get_handler(request):
     action = allGetRoutes[request.path]
     headers = action(request)
     # Send a server response
+
     return web.Response(
         body=headers[0],
         status=headers[1],
         content_type=headers[2],
         charset="utf-8"
     )
-
 
 # Handle POST requests here
 async def post_handler(request):
@@ -36,9 +35,6 @@ async def post_handler(request):
         charset="utf-8"
     )
 
-
-# TODO - Right now, a client is connected any time we receive a request for /websocket
-# TODO - but we might only want to connect a client if their logged in
 async def websocket_handler(request):
     ws = web.WebSocketResponse()
     await ws.prepare(request)
@@ -50,14 +46,14 @@ async def websocket_handler(request):
                 await ws.close()
             else:
                 # this will probably change
-                await ws.send_str(msg.data + '/answer')
+                #await ws.send_str(msg.data + '/newsfeed')
+                pass
         # If there is an exception, the socket will close
         elif msg.type == aiohttp.WSMsgType.ERROR:
             print('ws connection closed w/ exception %s' % ws.exception())
     # If we've reached the end of control flow, then the socket has closed
     print('websocket connection closed')
     return ws
-
 
 async def image_handler(request):
     headers = actions.resp_to_html_paths(request)
@@ -68,9 +64,7 @@ async def image_handler(request):
         charset="utf-8"
     )
 
-
 app = web.Application()
-# TODO - there might be a better way to do this.
 app.add_routes([
     web.get('/login', get_handler),
     web.get('/', get_handler),
