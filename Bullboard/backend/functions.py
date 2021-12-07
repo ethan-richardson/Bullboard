@@ -62,7 +62,7 @@ def load_profile(token):
         body = body.replace(b'{{Traits}}', create_trait_image_tags(user['Traits']))
         return body
     else:
-        return false
+        return False
 
 # Loads user profile for newsfeed
 def load_newsfeed_profile(token):
@@ -76,7 +76,7 @@ def load_newsfeed_profile(token):
             body = body.replace(b'{{Prof Pic}}', b'/images/prof_pics/' + user['Picture'].encode())
         return body
     else:
-        return false
+        return False
 
 #Creates image tags for profile loading
 def create_trait_image_tags(traits):

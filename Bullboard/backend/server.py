@@ -4,6 +4,7 @@ import routes
 import actions
 import database
 
+
 # Handle GET requests here
 async def get_handler(request):
     # Get all the routes associated with a GET request
@@ -19,6 +20,7 @@ async def get_handler(request):
         charset="utf-8"
     )
 
+
 # Handle POST requests here
 async def post_handler(request):
     data = await request.json()
@@ -33,7 +35,8 @@ async def post_handler(request):
         content_type=response[3],
         charset="utf-8"
     )
- 
+
+
 # TODO - Right now, a client is connected any time we receive a request for /websocket
 # TODO - but we might only want to connect a client if their logged in
 async def websocket_handler(request):
@@ -55,6 +58,7 @@ async def websocket_handler(request):
     print('websocket connection closed')
     return ws
 
+
 async def image_handler(request):
     headers = actions.resp_to_html_paths(request)
     return web.Response(
@@ -63,6 +67,7 @@ async def image_handler(request):
         content_type=headers[2],
         charset="utf-8"
     )
+
 
 app = web.Application()
 # TODO - there might be a better way to do this.
@@ -88,4 +93,3 @@ app.add_routes([
 ])
 # Run the server
 web.run_app(app)
-

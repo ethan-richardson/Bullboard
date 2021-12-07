@@ -5,7 +5,7 @@ import functions
 import datetime
 
 # TODO: Change from localhost to mongo
-mongo_string = "mongodb://localhost:27017"
+mongo_string = "mongodb://mongo:27017"
 
 def connect():
     client = MongoClient(mongo_string)
@@ -123,14 +123,6 @@ def get_posts():
     result = db.posts.find().sort('Posted', pymongo.DESCENDING)
     return result
 
-def fetch_logged():
-    db = connect()
-    online = []
-    collection = db.users.find({})
-    for doc in collection:
-        if len(doc["Token"]) != 0:
-            online.append(doc)
-    return online
 
 def add_message(user, message):
     db = connect()
