@@ -99,6 +99,7 @@ def construct_update_json(data, image_name):
         'Major': functions.html_escaper(data['major']),
         'Standing': functions.html_escaper(data['standing']),
         'Housing Status': functions.html_escaper(data['status']),
+        'Hometown': functions.html_escaper(data['hometown']),
         'Traits': traits
     }
     if image_name != '':

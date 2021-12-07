@@ -32,7 +32,7 @@
     </nav>
     <div class="grid-container">
         <div class="profile">
-            <img id="profPic2" src="/pages/images/VictorEBull.png" alt="Profile Picture">
+            <img id="profPic2" src="{{Prof Pic}}" alt="Profile Picture">
             <h2>Welcome, {{name}}!</h2>
         </div>
 
@@ -46,7 +46,7 @@
     
         <div class="createPost">
             <label for="post">Create new post:</label><br>
-            <span role="textbox" contenteditable id="post"></span>
+            <span role="textbox" class="spanBox" id="post" contenteditable></span>
             <button  value="submit" type="submit" onclick="processPost()">SEND</button>
             <br>
             <br>

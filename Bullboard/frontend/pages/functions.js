@@ -79,6 +79,7 @@ async function updateJSON() {
     var status = document.getElementById("status");
     var major = document.getElementById("major");
     var profPic = document.getElementById("profilePicture");
+    var hometown = document.getElementById("hometown");
     var selectedTraits = getTraits();
     budget = (parseInt(budget.value));
     var jsonMap = {
@@ -86,6 +87,7 @@ async function updateJSON() {
         major: major.value,
         status: status.value,
         standing: standing.value,
+        hometown: hometown.value,
         traits: selectedTraits,
     };
     if(profPic.files.length > 0) {
@@ -141,12 +143,13 @@ async function processUpdate() {
 //Generates post adding json string
 function addPostJSON() {
     var post = document.getElementById("post");
-    return JSON.stringify({'post': post.value});
+    return JSON.stringify({'post': post.innerHTML});
 }
 
 //Sends post info to server
 function processPost() {
     const json = addPostJSON();
+    console.log(json)
     if (json !== "") {
         const request = new XMLHttpRequest();
         request.onreadystatechange = function () {
@@ -157,6 +160,34 @@ function processPost() {
             }
         };
         request.open("POST", "/add_post");
+        request.send(json);
+    }
+}
+
+
+//Generates post adding json string
+function sendMessageJSON() {
+    const post = document.getElementById("message");
+    const recipient = document.getElementById("recipient");
+    const message = post.innerHTML;
+    post.innerHTML = "";
+    return JSON.stringify({'Message': message, 'Recipient': recipient.innerHTML});
+}
+
+
+function processMessage() {
+    const json = sendMessageJSON();
+    console.log(json)
+    if (json !== "") {
+        const request = new XMLHttpRequest();
+        request.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 201) {
+                // window.location.replace('/newsfeed');
+            } else if (this.readyState === 4 && this.status === 404) {
+                alert("Could not add post")
+            }
+        };
+        request.open("POST", "/send_message");
         request.send(json);
     }
 }
