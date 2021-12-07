@@ -9,6 +9,8 @@ import time
 from datetime import date
 from base64 import b64decode
 
+
+
 # Verifies password requirements are satisfied
 def verify_password(password, password2):
     if password != password2:
@@ -78,7 +80,7 @@ def load_newsfeed_profile(token):
     else:
         return false
 
-#Creates image tags for profile loading
+# Creates image tags for profile loading
 def create_trait_image_tags(traits):
     output = ""
     for trait in traits:
@@ -87,7 +89,7 @@ def create_trait_image_tags(traits):
                        "\" title=\"" + trait + "\"\n>")
     return output.encode()
 
-#Gets image path
+# Gets image path
 def get_trait_image(trait):
     if trait == 'UB Athlete':
         return 'athleteIcon.png'
@@ -110,14 +112,14 @@ def get_trait_image(trait):
     elif trait == 'Night Owl':
         return 'nightOwlIcon.png'
 
-#Calculates users age from birthday
+# Calculates users age from birthday
 def age(birthday):
     birthdate = birthday.split("-")
     today = date.today()
     age = today.year - int(birthdate[0]) - ((today.month, today.day) < (int(birthdate[1]), int(birthdate[2])))
     return str(age)
 
-#Adds profile picture to server storage
+# Adds profile picture to server storage
 def add_image(picture):
     if picture['name'] != '':
         name_split = picture['name'].split('.')
@@ -134,7 +136,7 @@ def add_image(picture):
     else:
         return ''
 
-#Creates post elements for newsfeed template
+# Creates post elements for newsfeed template
 def create_post_elements():
     output = ""
     posts = database.get_posts()
@@ -143,6 +145,7 @@ def create_post_elements():
                    post['Post'] + '</p>\n')
     return output
 
+# Fetches user info from database
 def get_user(token):
     if token:
         user = database.retrieve_user(token)
