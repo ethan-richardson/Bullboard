@@ -22,39 +22,32 @@
 <body>
     <nav>
         <ul>
-            <li><a href="newsfeed.html">HOME</a></li>
-            <li><a class="active" href="profile.html">PROFILE</a></li>
-            <li><a href="direct_messages.html">MESSAGES</a></li>
-            <li><a href="live_map.html">MAP</a></li>
-            <li style="float:right"><a href="index.html">LOG OUT</a></li>
+            <li><a href="/newsfeed">HOME</a></li>
+            <li><a class="active" href="/profile">PROFILE</a></li>
+            <li><a href="/messages">MESSAGES</a></li>
+            <li><a href="/map">MAP</a></li>
+            <li style="float:right"><a href="/">LOG OUT</a></li>
         </ul>
     </nav>
 
-    <button id="editProf" onclick="window.location.href='#edit_profile'">
+    <button id="editProf" onclick="window.location.href='/edit'">
         <img style="width: 20px;" src="images/edit.png" alt="Edit Icon">
         Edit Profile  
     </button>
 
     <div style="text-align: center;">
-        <img id="profPic" src="images/default.png" alt="Profile Picture">
+        <img id="profPic" src="{{Prof Pic}}" alt="Profile Picture">
         <h1>{{First Name}} {{Last Name}}</h1>
         <h2>{{Standing}} - {{Age}} years old</h2>
         <div id="traits">
-            <img class="icon" src="images/athleteIcon.png" alt="UB Athlete" title="UB Athlete">
-            <img class="icon" src="images/workoutIcon.png" alt="Gym Rat" title="Gym Rat">
-            <img class="icon" src="images/earlyRiserIcon.png" alt="Early Riser" title="Early Riser">
-            <img class="icon" src="images/gamerIcon.png" alt="Gamer" title="Gamer">
+            {{Traits}}
             <br>
-            <!-- {{traits}} -->
         </div>
         <h3>Status: I am currently looking for {{Status}}</h3>
         <h3>UB Major: {{Major}}</h3>
         <h3>Hometown: {{Hometown}}</h3>
-        <h3>Budget: {{Budget}}</h3>
+        <h3>Budget: ${{Budget}}</h3>
     </div>
-
-
-    
 </body>
 
 <footer>

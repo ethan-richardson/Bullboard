@@ -4,21 +4,21 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
     <link href="https://fonts.googleapis.com/css2?family=Gruppo&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Emblema+One&family=Gruppo&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
+
     <!-- style sheet -->
     <link rel="stylesheet" href="styles.css">
-    
+
     <!-- tab name -->
     <title>BullBoard</title>
 </head>
+
 <body>
 
     <div style="text-align: center; padding: 20px;">
@@ -42,32 +42,14 @@
             <p style="font-size: 18px;">
                 New to Bull Board? <br>
                 Create a new account
-                <a href="create_account.html">here</a>!
+                <a href="/register">here</a>!
             </p>
         </div>
         <p id="invalid"></p>
     </div>
 
 <script src="functions.js"></script>
-<script>
-        function processLogin() {
-            const json = loginJSON();
-            if (json !== "") {
-                const request = new XMLHttpRequest();
-                const feedback = document.getElementById("invalid");
-                request.onreadystatechange = function () {
-                    if (this.readyState === 4 && this.status === 200) {
-                        //Route to newsfeed when setup
-                        alert("You are now logged in")
-                    } else if (this.readyState === 4 && this.status === 404) {
-                        feedback.innerHTML = "Invalid Login";
-                    }
-                };
-                request.open("POST", "/login_attempt");
-                request.send(json);
-            }
-        }
-</script>
+
 </body>
 <footer>
     <p>
