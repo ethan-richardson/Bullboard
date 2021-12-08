@@ -3,3 +3,4 @@
 venv
 frontend/pages/images/prof_pics/*
 !frontend/pages/images/prof_pics/default.png
+frontend/pages/images/sunny
