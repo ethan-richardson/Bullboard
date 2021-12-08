@@ -59,11 +59,8 @@ def load_profile(token):
         body = body.replace(b'{{Major}}', user['Major'].encode())
         body = body.replace(b'{{Hometown}}', user['Hometown'].encode())
         body = body.replace(b'{{Budget}}', str(user['Budget']).encode())
-        if user['Picture'] == '':
-            body = body.replace(b'{{Prof Pic}}', b'/images/prof_pics/default.png')
-        else:
-            body = body.replace(b'{{Prof Pic}}', b'/images/prof_pics/' + user['Picture'].encode())
-        body = body.replace(b'{{Traits}}', create_trait_image_tags(user['Traits']))
+        body = body.replace(b'{{Prof Pic}}', b'/images/prof_pics/' + user['Picture'].encode())
+        body = body.replace(b'{{Traits}}', create_trait_image_tags(user['Traits'], "icon").encode())
         return body
     else:
         return False
@@ -78,7 +75,7 @@ def load_newsfeed_profile(token):
         all_users = database.fetch_all()
         user_elements = get_user_elements(online_users, all_users)
         body = body.replace(b'{{activeUsers}}', user_elements[0])
-        body = body.replace(b'{{offlineUsers}}', user_elements[1])
+        body = body.replace(b'{{inactiveUsers}}', user_elements[1])
         if user['Picture'] == '':
             body = body.replace(b'{{Prof Pic}}', b'/images/prof_pics/default.png')
         else:
@@ -89,7 +86,7 @@ def load_newsfeed_profile(token):
 
 def get_user_elements(online_users, all_users):
     active = ""
-    offline = ""
+    inactive = ""
     active_map = {}
     for user in online_users:
         if user:
@@ -98,18 +95,17 @@ def get_user_elements(online_users, all_users):
     for user in all_users:
         name = user['First Name'] + ' ' + user['Last Name']
         if name not in active_map:
-            offline += ("<br><li>" + name + "</li><br>\n")
-
-    return [active.encode(), offline.encode()]
+            inactive += ("<br><li>" + name + "</li><br>\n")
+    return [active.encode(), inactive.encode()]
 
 # Creates image tags for profile loading
-def create_trait_image_tags(traits):
+def create_trait_image_tags(traits, html_class):
     output = ""
     for trait in traits:
         if traits[trait]:
-            output += ("<img class=\"icon\" src=\"images/" + get_trait_image(trait) + "\" alt=\"" + trait +
+            output += ("<img class=\"" + html_class + "\" src=\"images/" + get_trait_image(trait) + "\" alt=\"" + trait +
                        "\" title=\"" + trait + "\"\n>")
-    return output.encode()
+    return output
 
 # Gets image path
 def get_trait_image(trait):
@@ -163,8 +159,18 @@ def create_post_elements():
     output = ""
     posts = database.get_posts()
     for post in posts:
-        output += ('<p class=\"newsfeedPost\"><b>' + post['First Name'] + ' ' + post['Last Name'] + '</b>: ' +
-                   post['Post'] + '</p>\n')
+        output += (
+                '<div class=\"newsfeedPost\">\n' +
+                '   <img class=\"newsfeedPic\" src=\"/images/prof_pics/' + post['Picture'] + '\" alt=\"Profile Picture\">\n' +
+                '   <h4><b>' + post['Name'] + '</b>' + '</h4>\n' +
+                '   <h5>\n' +
+                '       ' + post['Standing'] + create_trait_image_tags(post['Traits'], "icon2") + '\n' +
+                '   </h5>\n' +
+                '   <p class=\"newsfeedMessage\">' + post['Post'] + '</p>\n' +
+                '   <a class=\"dm\" href=\"/messages\">Message</a>\n' +
+                '   <br>\n' +
+                '</div>\n'
+        )
     return output
 
 # Fetches user info from database
