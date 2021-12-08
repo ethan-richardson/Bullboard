@@ -186,7 +186,7 @@ function processMessage() {
             if (this.readyState === 4 && this.status === 201) {
                 // window.location.replace('/newsfeed');
             } else if (this.readyState === 4 && this.status === 404) {
-                alert("Could not add post")
+                alert("User does not exist")
             }
         };
         request.open("POST", "/send_message");

@@ -66,6 +66,7 @@ def load_profile(token):
     else:
         return False
 
+
 # Loads user profile for newsfeed
 def load_newsfeed_profile(token):
     user = database.retrieve_user(token)
@@ -161,5 +162,24 @@ def get_user(token):
             return False
     else:
         return False
+
+#def create_messages(sender, recipient):
+#    output = ""
+#    messages = database.get_messages(sender, recipient)
+#    for message in messages:
+#        output += ('<p class=\"newsfeedPost\"><b>' + message['Sender_to_Recipient'] + '</b>: ' +
+#                   message['Message'] + '</p>\n')
+#        return output
+
+def create_messages(user, receiver):
+    output = ""
+    messages = database.get_messages(user, receiver)
+    for message in messages:
+        output += ('<p class=\"newsfeedPost\"><b>' + message['Sender'] + '</b>: ' +
+                   message['Message'] + '</p>\n')
+
+
+
+
 
 

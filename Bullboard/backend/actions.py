@@ -60,8 +60,17 @@ def map(request):
 
 # Serves the direct messages
 def messages(request):
+    token = request.cookies.get('token')
+    user = functions.get_user(token)
 
     body = file.read_file(read_file_string + "frontend/pages/direct_messages.html")
+
+    #receiver = database.get_receiver(user)
+
+    #if receiver:
+        #message_elements = functions.create_messages(user, receiver)
+        #body = body.replace(b'{{msgs}}', message_elements.encode())
+
     response_code = 200
     content_type = "text/html"
     return [body, response_code, content_type]
@@ -133,11 +142,13 @@ def edit_profile(request, data):
 def send_message(request, data):
     token = request.cookies.get('token')
     user = functions.get_user(token)
+
     if user:
         # TODO: Add direct message logic here
         database.add_message(user, data)
         response_code = 200
         content_type = "text/plain"
         return [b"", b"Message added", response_code, content_type]
+
     else:
         return [b"", b"You must log in", 403, "text/plain"]
