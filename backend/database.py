@@ -151,9 +151,7 @@ def fetch_all():
 
 def add_message(sender, data):
     db = connect()
-    print(sender['UBIT'])
     receiver = db.users.find_one({"UBIT": data['Recipient']})
-    print(receiver['UBIT'])
     if receiver:
         sent = {
                 'Recipient': receiver['UBIT'],
@@ -163,7 +161,7 @@ def add_message(sender, data):
             }
         received = {
             'Sender': sender['UBIT'],
-            'Name': receiver['First Name'] + ' ' + receiver['Last Name'],
+            'Name': sender['First Name'] + ' ' + sender['Last Name'],
             'Message': functions.html_escaper(data['Message']),
             'Sent': datetime.datetime.now(),
         }
@@ -175,20 +173,18 @@ def add_message(sender, data):
 
 def get_messages(sender, receiver):
     db = connect()
-    sent = db.messages.find({'User': sender,'Sent Messages.Recipient': receiver})
-    received = db.messages.find({'User': sender,'Received Messages.Sender': receiver})
-    # print(len(list(sent.clone())))
-    # print(len(list(received.clone())))
-    if sent.count_documents > 0 and received.count_documents > 0:
+    sent = db.messages.find({'User': sender, 'Sent Messages.Recipient': receiver})
+    received = db.messages.find({'User': sender, 'Received Messages.Sender': receiver})
+    if len(list(received.clone())) > 0 and len(list(sent.clone())):
         sent_messages = sent.next()['Sent Messages']
         received_messages = received.next()['Received Messages']
         all_messages = sent_messages + received_messages
-        all_messages.sort(key=lambda x:x['Sent'])
+        all_messages.sort(key=lambda x: x['Sent'])
         return all_messages
-    elif len(list(sent)) > 0:
+    elif len(list(sent.clone())) > 0:
         sent_messages = sent.next()['Sent Messages']
         return sent_messages
-    elif len(list(received)) > 0:
+    elif len(list(received.clone())) > 0:
         received_messages = received.next()['Received Messages']
         return received_messages
     else:

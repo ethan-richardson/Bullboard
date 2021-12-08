@@ -193,12 +193,11 @@ def get_user(token):
 def create_messages(messages):
     output = ""
     for message in messages:
-        if 'Recipient' in message:
             output += "<p class=\"directMessage\"><b>" + message['Name'] + '</b>: ' + message['Message'] + '</p>\n'
-        # else:
-        #     return
     return output
 
 def get_ubit(request):
     slash_split = request.path.split('/')
     return slash_split[2]
+
+# def get_ubits():
