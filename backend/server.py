@@ -10,12 +10,13 @@ async def get_handler(request):
     allGetRoutes = routes.get_routes
     # Call the action that is associated with the current request
     action = allGetRoutes[request.path]
-    headers = action(request)
+    response = action(request)
     # Send a server response
     return web.Response(
-        body=headers[0],
-        status=headers[1],
-        content_type=headers[2],
+        headers=response[0],
+        body=response[1],
+        status=response[2],
+        content_type=response[3],
         charset="utf-8"
     )
 
@@ -33,9 +34,7 @@ async def post_handler(request):
         content_type=response[3],
         charset="utf-8"
     )
- 
-# TODO - Right now, a client is connected any time we receive a request for /websocket
-# TODO - but we might only want to connect a client if their logged in
+
 async def websocket_handler(request):
     ws = web.WebSocketResponse()
     await ws.prepare(request)
@@ -47,7 +46,8 @@ async def websocket_handler(request):
                 await ws.close()
             else:
                 # this will probably change
-                await ws.send_str(msg.data + '/answer')
+                #await ws.send_str(msg.data + '/newsfeed')
+                pass
         # If there is an exception, the socket will close
         elif msg.type == aiohttp.WSMsgType.ERROR:
             print('ws connection closed w/ exception %s' % ws.exception())
@@ -56,16 +56,16 @@ async def websocket_handler(request):
     return ws
 
 async def image_handler(request):
-    headers = actions.resp_to_html_paths(request)
+    response = actions.resp_to_html_paths(request)
     return web.Response(
-        body=headers[0],
-        status=headers[1],
-        content_type=headers[2],
+        headers=response[0],
+        body=response[1],
+        status=response[2],
+        content_type=response[3],
         charset="utf-8"
     )
 
 app = web.Application()
-# TODO - there might be a better way to do this.
 app.add_routes([
     web.get('/login', get_handler),
     web.get('/', get_handler),
@@ -84,8 +84,8 @@ app.add_routes([
     web.get('/messages', get_handler),
     web.get('/map', get_handler),
     web.post('/add_post', post_handler),
-    web.post('/send_message', post_handler)
+    web.post('/send_message', post_handler),
+    web.get('/logout', get_handler)
 ])
 # Run the server
 web.run_app(app)
-

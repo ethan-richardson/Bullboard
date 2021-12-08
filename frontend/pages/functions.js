@@ -1,4 +1,4 @@
-// const socket = new WebSocket('ws://' + window.location.host + '/websocket');
+const socket = new WebSocket('ws://' + window.location.host + '/websocket');
 
 //Generates registration json string
 function registrationJSON() {

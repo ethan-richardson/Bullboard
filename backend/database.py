@@ -1,14 +1,14 @@
 import bcrypt
 import pymongo
+import datetime
 from pymongo import MongoClient
 import functions
-import datetime
 
-# TODO: Change from localhost to mongo
-mongo_string = "mongodb://localhost:27017"
+# TODO: Change from localhost to mongo when using docker, use localhost when running locally
+mongoString = "mongodb://localhost:27017"
 
 def connect():
-    client = MongoClient(mongo_string)
+    client = MongoClient(mongoString)
     return client.bullboard
 
 def verify_login(user_info):
@@ -18,7 +18,7 @@ def verify_login(user_info):
     if found_user:
         # Password matches
         if bcrypt.checkpw(user_info['password'].encode(), found_user['Password'].encode()):
-            return True
+            return found_user
         # Invalid password
         else:
             return False
@@ -60,10 +60,13 @@ def add_user(user_info):
     return
 
 
-def store_token(email, token):
+def store_token(user, token):
     db = connect()
     hashed_token = functions.hash_token(token)
-    db.users.update_one({"Email": email}, {"$set": {"Token": hashed_token}})
+    name = user["First Name"] + " " + user["Last Name"]
+    db.active.create_index("Inserted", expireAfterSeconds=3600)
+    db.active.insert({"Name": name, "Token": hashed_token, "Inserted": datetime.datetime.utcnow()})
+    db.users.update_one({"Email": user["Email"]}, {"$set": {"Token": hashed_token}})
     return
 
 
@@ -123,3 +126,17 @@ def get_posts():
     result = db.posts.find().sort('Posted', pymongo.DESCENDING)
     return result
 
+def fetch_logged():
+    db = connect()
+    return db.active.find({})
+
+
+def process_logout(user):
+    db = connect()
+    db.active.delete_one({'Token': user['Token']})
+    db.users.update_one({'_id': user['_id']}, {'$set': {'Token': ''}})
+
+def fetch_all():
+    db = connect()
+    users = db.users.find({})
+    return users

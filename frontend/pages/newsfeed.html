@@ -27,7 +27,7 @@
             <li><a href="/profile">PROFILE</a></li>
             <li><a href="/messages">MESSAGES</a></li>
             <li><a href="/map">MAP</a></li>
-            <li style="float:right"><a href="/">LOG OUT</a></li>
+            <li style="float:right"><a href="/logout">LOG OUT</a></li>
         </ul>
     </nav>
     <div class="grid-container">
@@ -40,7 +40,9 @@
             <h3 style="text-align: center; border: solid; padding: 5px; border-width: 2px; background-color: rgb(148, 148, 148);">Active Users</h3>
             <br>
             <div id="userList">
-                {{activeUser}}
+                <ul>
+                    {{activeUser}}
+                </ul>
             </div>
         </div>
     
