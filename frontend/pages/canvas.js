@@ -2,12 +2,13 @@ const socket = new WebSocket('ws://' + window.location.host + '/websocket');
 
 window.addEventListener("load",() => {
 
-    //var map = document.getElementById("map");
-    var canvas = document.getElementById("canvas");
-    var img = new Image(1379, 974);
-    img.src = 'images/northCampus.png'
-    var ctx = canvas.getContext("2d");
-    ctx.drawImage(img, 0, 0);
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    var img = document.createElement("img");
+    img.src = "/images/northCampus.png";
+    img.width = "100%";
+    img.height = "100%";  
+    ctx.drawImage(img, 10, 10);
 
     let painting = false;
 
