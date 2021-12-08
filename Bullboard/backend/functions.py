@@ -12,6 +12,7 @@ from base64 import b64decode
 #Change this based on your file extensions
 read_file_string = ""
 
+
 # Verifies password requirements are satisfied
 def verify_password(password, password2):
     if password != password2:
@@ -20,6 +21,7 @@ def verify_password(password, password2):
         return True
     else:
         return False
+
 
 # Generates login cookie
 def login_token():
@@ -57,15 +59,11 @@ def load_profile(token):
         body = body.replace(b'{{Major}}', user['Major'].encode())
         body = body.replace(b'{{Hometown}}', user['Hometown'].encode())
         body = body.replace(b'{{Budget}}', str(user['Budget']).encode())
-        if user['Picture'] == '':
-            body = body.replace(b'{{Prof Pic}}', b'/images/prof_pics/default.png')
-        else:
-            body = body.replace(b'{{Prof Pic}}', b'/images/prof_pics/' + user['Picture'].encode())
-        body = body.replace(b'{{Traits}}', create_trait_image_tags(user['Traits']))
+        body = body.replace(b'{{Prof Pic}}', b'/images/prof_pics/' + user['Picture'].encode())
+        body = body.replace(b'{{Traits}}', create_trait_image_tags(user['Traits'], "icon").encode())
         return body
     else:
         return False
-
 
 # Loads user profile for newsfeed
 def load_newsfeed_profile(token):
@@ -73,31 +71,43 @@ def load_newsfeed_profile(token):
     if user:
         body = file.read_file(read_file_string + "frontend/pages/newsfeed.html")
         body = body.replace(b'{{name}}', user['First Name'].encode())
+        online_users = database.fetch_logged()
+        all_users = database.fetch_all()
+        user_elements = get_user_elements(online_users, all_users)
+        body = body.replace(b'{{activeUsers}}', user_elements[0])
+        body = body.replace(b'{{inactiveUsers}}', user_elements[1])
         if user['Picture'] == '':
-            body_as_list = file.read_file_as_list(read_file_string + "frontend/pages/newsfeed.html")
-            start_of_list = body_as_list.index('                {{activeUser}}\n')
-            body_as_list[start_of_list] = ''
-            online_users = database.fetch_logged()
-            for user in online_users:
-                body_as_list[start_of_list] = f'<li>{user["Email"]}</li>' + body_as_list[start_of_list] + '\n'
-            updated_body = ''.join(ele for ele in body_as_list).encode()
-            body = updated_body.replace(b'{{Prof Pic}}', b'/images/prof_pics/default.png')
+            body = body.replace(b'{{Prof Pic}}', b'/images/prof_pics/default.png')
         else:
             body = body.replace(b'{{Prof Pic}}', b'/images/prof_pics/' + user['Picture'].encode())
         return body
     else:
         return False
 
-#Creates image tags for profile loading
-def create_trait_image_tags(traits):
+def get_user_elements(online_users, all_users):
+    active = ""
+    inactive = ""
+    active_map = {}
+    for user in online_users:
+        if user:
+            active_map[user['Name']] = 0
+            active += ("<br><li>" + user["Name"] + "</li><br>\n")
+    for user in all_users:
+        name = user['First Name'] + ' ' + user['Last Name']
+        if name not in active_map:
+            inactive += ("<br><li>" + name + "</li><br>\n")
+    return [active.encode(), inactive.encode()]
+
+# Creates image tags for profile loading
+def create_trait_image_tags(traits, html_class):
     output = ""
     for trait in traits:
         if traits[trait]:
-            output += ("<img class=\"icon\" src=\"images/" + get_trait_image(trait) + "\" alt=\"" + trait +
+            output += ("<img class=\"" + html_class + "\" src=\"images/" + get_trait_image(trait) + "\" alt=\"" + trait +
                        "\" title=\"" + trait + "\"\n>")
-    return output.encode()
+    return output
 
-#Gets image path
+# Gets image path
 def get_trait_image(trait):
     if trait == 'UB Athlete':
         return 'athleteIcon.png'
@@ -120,14 +130,14 @@ def get_trait_image(trait):
     elif trait == 'Night Owl':
         return 'nightOwlIcon.png'
 
-#Calculates users age from birthday
+# Calculates users age from birthday
 def age(birthday):
     birthdate = birthday.split("-")
     today = date.today()
     age = today.year - int(birthdate[0]) - ((today.month, today.day) < (int(birthdate[1]), int(birthdate[2])))
     return str(age)
 
-#Adds profile picture to server storage
+# Adds profile picture to server storage
 def add_image(picture):
     if picture['name'] != '':
         name_split = picture['name'].split('.')
@@ -144,15 +154,26 @@ def add_image(picture):
     else:
         return ''
 
-#Creates post elements for newsfeed template
+# Creates post elements for newsfeed template
 def create_post_elements():
     output = ""
     posts = database.get_posts()
     for post in posts:
-        output += ('<p class=\"newsfeedPost\"><b>' + post['First Name'] + ' ' + post['Last Name'] + '</b>: ' +
-                   post['Post'] + '</p>\n')
+        output += (
+                '<div class=\"newsfeedPost\">\n' +
+                '   <img class=\"newsfeedPic\" src=\"/images/prof_pics/' + post['Picture'] + '\" alt=\"Profile Picture\">\n' +
+                '   <h4><b>' + post['Name'] + '</b>' + '</h4>\n' +
+                '   <h5>\n' +
+                '       ' + post['Standing'] + create_trait_image_tags(post['Traits'], "icon2") + '\n' +
+                '   </h5>\n' +
+                '   <p class=\"newsfeedMessage\">' + post['Post'] + '</p>\n' +
+                '   <a class=\"dm\" href=\"/messages\">Message</a>\n' +
+                '   <br>\n' +
+                '</div>\n'
+        )
     return output
 
+# Fetches user info from database
 def get_user(token):
     if token:
         user = database.retrieve_user(token)
@@ -162,14 +183,6 @@ def get_user(token):
             return False
     else:
         return False
-
-#def create_messages(sender, recipient):
-#    output = ""
-#    messages = database.get_messages(sender, recipient)
-#    for message in messages:
-#        output += ('<p class=\"newsfeedPost\"><b>' + message['Sender_to_Recipient'] + '</b>: ' +
-#                   message['Message'] + '</p>\n')
-#        return output
 
 def create_messages(user, receiver):
     output = ""

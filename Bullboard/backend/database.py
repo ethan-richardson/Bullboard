@@ -11,7 +11,7 @@ def connect():
     client = MongoClient(mongoString)
     return client.bullboard
 
-#for direct messages, make emails and username unique
+#for direct messages, make emails/username unique
 def verify_unused_email(user_info):
     db = connect()
     found_user = db.users.find_one({'Email': user_info['email']})
@@ -27,7 +27,7 @@ def verify_login(user_info):
     if found_user:
         # Password matches
         if bcrypt.checkpw(user_info['password'].encode(), found_user['Password'].encode()):
-            return True
+            return found_user
         # Invalid password
         else:
             return False
@@ -55,7 +55,7 @@ def add_user(user_info):
         'Email': functions.html_escaper(user_info['email']),
         'First Name': functions.html_escaper(user_info['first']),
         'Last Name': functions.html_escaper(user_info['last']),
-        'Picture': '',
+        'Picture': 'default.png',
         'Token': '',
         'Password': hashed_pw,
         'Birthday': functions.html_escaper(user_info['birthday']),
@@ -70,16 +70,16 @@ def add_user(user_info):
     return
 
 
-def store_token(email, token):
+def store_token(user, token):
     db = connect()
     hashed_token = functions.hash_token(token)
-    db.users.update_one({"Email": email}, {"$set": {"Token": hashed_token}})
+    name = user["First Name"] + " " + user["Last Name"]
+    db.active.create_index("Inserted", expireAfterSeconds=3600)
+    input_json = {"Name": name, "Token": hashed_token, "Inserted": datetime.datetime.utcnow()}
+    db.active.replace_one({"Name": name}, input_json, True)
+    db.users.update_one({"Email": user["Email"]}, {"$set": {"Token": hashed_token}})
     return
 
-def email_retrieve_user(email):
-    db = connect()
-    result = db.users.find_one({"Email": email})
-    return result
 
 def retrieve_user(token):
     db = connect()
@@ -113,6 +113,7 @@ def construct_update_json(data, image_name):
         'Major': functions.html_escaper(data['major']),
         'Standing': functions.html_escaper(data['standing']),
         'Housing Status': functions.html_escaper(data['status']),
+        'Hometown': functions.html_escaper(data['hometown']),
         'Traits': traits
     }
     if image_name != '':
@@ -123,9 +124,11 @@ def construct_update_json(data, image_name):
 def add_post(user, post):
     db = connect()
     json = {
-        'First Name': user['First Name'],
-        'Last Name': user['Last Name'],
+        'Name': user['First Name'] + ' ' + user['Last Name'],
+        'Standing': user['Standing'],
         'Post': functions.html_escaper(post['post']),
+        'Picture': user['Picture'],
+        'Traits': user['Traits'],
         'Posted': datetime.datetime.now(),
     }
     db.posts.insert_one(json)
@@ -138,13 +141,18 @@ def get_posts():
 
 def fetch_logged():
     db = connect()
-    online = []
-    collection = db.users.find({})
-    for doc in collection:
-        if len(doc["Token"]) != 0:
-            online.append(doc)
-    return online
+    return db.active.find({})
 
+
+def process_logout(user):
+    db = connect()
+    db.active.delete_one({'Token': user['Token']})
+    db.users.update_one({'_id': user['_id']}, {'$set': {'Token': ''}})
+
+def fetch_all():
+    db = connect()
+    users = db.users.find({})
+    return users
 
 
 def add_message(sender, data):
@@ -176,4 +184,6 @@ def get_messages(sender, receiver):
         #receiver = db.users.find_one({messages['Recipient']})
         #if receiver:
             #return receiver
+
+
 

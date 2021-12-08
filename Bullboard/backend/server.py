@@ -10,13 +10,13 @@ async def get_handler(request):
     allGetRoutes = routes.get_routes
     # Call the action that is associated with the current request
     action = allGetRoutes[request.path]
-    headers = action(request)
+    response = action(request)
     # Send a server response
-
     return web.Response(
-        body=headers[0],
-        status=headers[1],
-        content_type=headers[2],
+        headers=response[0],
+        body=response[1],
+        status=response[2],
+        content_type=response[3],
         charset="utf-8"
     )
 
@@ -56,13 +56,28 @@ async def websocket_handler(request):
     return ws
 
 async def image_handler(request):
-    headers = actions.resp_to_html_paths(request)
+    response = actions.resp_to_html_paths(request)
     return web.Response(
-        body=headers[0],
-        status=headers[1],
-        content_type=headers[2],
+        headers=response[0],
+        body=response[1],
+        status=response[2],
+        content_type=response[3],
         charset="utf-8"
     )
+
+
+async def message_handler(request):
+    if request.method == "GET":
+        response = actions.messages(request)
+    elif request.method == "POST":
+        response = actions.send_message(request)
+    return web.Response(
+        body=response[1],
+        status=response[2],
+        content_type=response[3],
+        charset="utf-8"
+    )
+
 
 app = web.Application()
 app.add_routes([
@@ -83,7 +98,11 @@ app.add_routes([
     web.get('/messages', get_handler),
     web.get('/map', get_handler),
     web.post('/add_post', post_handler),
-    web.post('/send_message', post_handler)
+    web.post('/send_message', post_handler),
+    web.get('/logout', get_handler),
+    web.get('/messages/{ubit}', message_handler),
+    web.post('/messages/{ubit}', message_handler),
 ])
+
 # Run the server
 web.run_app(app)
