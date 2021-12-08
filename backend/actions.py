@@ -4,7 +4,7 @@ import database
 import functions
 
 #Change this based on your file extensions
-read_file_string = "../"
+read_file_string = ""
 
 # Serves the login page
 def login(request):
@@ -105,6 +105,8 @@ def login_attempt(request, data):
 
 # Handles account creation
 def create_account(request, data):
+    if not functions.verify_email(data['email']):
+        return [b"", b"Email is not valid or duplicate account exists", 404, "text/plain"]
     if functions.verify_password(data['password'], data['rePassword']):
         database.add_user(data)
         return [b"", b"User Added", 201, "text/plain"]

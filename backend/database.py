@@ -5,7 +5,7 @@ from pymongo import MongoClient
 import functions
 
 # TODO: Change from localhost to mongo when using docker, use localhost when running locally
-mongoString = "mongodb://localhost:27017"
+mongoString = "mongodb://mongo:27017"
 
 def connect():
     client = MongoClient(mongoString)
@@ -70,6 +70,10 @@ def store_token(user, token):
     db.users.update_one({"Email": user["Email"]}, {"$set": {"Token": hashed_token}})
     return
 
+def retrieve_user_email(email):
+    db = connect()
+    result = db.users.find_one({"Email": email})
+    return result
 
 def retrieve_user(token):
     db = connect()

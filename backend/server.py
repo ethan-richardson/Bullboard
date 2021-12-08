@@ -65,10 +65,24 @@ async def image_handler(request):
         charset="utf-8"
     )
 
+# async def message_handler(request):
+#     if request.method == "GET":
+#         response = actions.messages(request)
+#     elif request.method == "POST":
+#         response = actions.send_message(request)
+#     return web.Response(
+#         body=response[1],
+#         status=response[2],
+#         content_type=response[3],
+#         charset="utf-8"
+#     )
+
 app = web.Application()
 app.add_routes([
     web.get('/login', get_handler),
     web.get('/', get_handler),
+    # web.get('/messages/{ubit}', message_handler),
+    # web.post('/messages/{ubit}', message_handler),
     web.get('/images/{name}', image_handler),
     web.get('/images/prof_pics/{name}', image_handler),
     web.get('/register', get_handler),

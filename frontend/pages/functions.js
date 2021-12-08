@@ -1,5 +1,3 @@
-const socket = new WebSocket('ws://' + window.location.host + '/websocket');
-
 //Generates registration json string
 function registrationJSON() {
     var email = document.getElementById("email");
@@ -35,7 +33,11 @@ function processRegistration() {
             if (this.readyState === 4 && this.status === 201) {
                 window.location.replace('/');
             }  else if (this.readyState === 4 && this.status === 404) {
-                feedback.innerHTML = "Password does not meet all requirements";
+                if (this.responseText.startsWith("Password")) {
+                    feedback.innerHTML = "Password does not meet all requirements";
+                } else if (this.responseText.startsWith("Email")) {
+                    feedback.innerHTML = "Email is not valid or a duplicate account exists";
+                }
             }
         };
         request.open("POST", "/create_account");
