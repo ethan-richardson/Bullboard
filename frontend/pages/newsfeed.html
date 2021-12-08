@@ -30,45 +30,69 @@
             <li style="float:right"><a href="/logout">LOG OUT</a></li>
         </ul>
     </nav>
+
     <div class="grid-container">
+
         <div class="profile">
             <img id="profPic2" src="{{Prof Pic}}" alt="Profile Picture">
             <h2>Welcome, {{name}}!</h2>
         </div>
 
         <div class="activeUsers">
-            <h3 style="text-align: center; border: solid; padding: 5px; border-width: 2px; background-color: rgb(148, 148, 148);">Active Users</h3>
+            <h3 class="userListHeading">
+                ONLINE
+                <img style="width: 30px; vertical-align: bottom;" src="/frontend/pages/images/active.png" alt="Active User">
+                </h3>
+            <hr>            
+            <div id="online">
+                {{activeUsers}}
+            </div>
             <br>
-            <div id="userList">
-                <ul>
-                    {{activeUser}}
-                </ul>
+            <h3 class="userListHeading">
+                OFFLINE
+                <img style="width: 30px; vertical-align: bottom;" src="/frontend/pages/images/inactive.png" alt="Active User">
+            </h3>
+            <hr>
+            <div id="offline">
+                {{inactiveUsers}}
             </div>
         </div>
     
         <div class="createPost">
             <label for="post">Create new post:</label><br>
             <span role="textbox" class="spanBox" id="post" contenteditable></span>
-            <button  value="submit" type="submit" onclick="processPost()">SEND</button>
+            <button id="sendButton" value="submit" type="submit" onclick="processPost()">SEND</button>
             <br>
             <br>
             <hr>
+            <h1 style="text-align: center;">Newsfeed</h1>
         </div>
 
         <div class="newsfeed">
-            <h1 style="text-align: center;">Newsfeed</h1>
-            {{posts}}
+            
+            <div class="newsfeedPost">
+                <img class="newsfeedPic" src="{{Prof Pic}}" alt="Profile Picture">
+                <h4>
+                    <b>{{name}}</b>
+                    <br>{{standing}}
+                </h4>
+                <p class="newsfeedMessage">{{}}</p>
+                <a class="dm" href="#direct_messages">Message</a>
+                <br>
+            </div>
+
+            <!-- {{posts}} -->
         </div>
     </div>
 
 </body>
-<!-- 
+
 <footer>
     <p>
         BULLBOARD <br>
         Developed by Lauren Richardson, Jay Hou, Ethan Richardson, Cindy Cheng, Zayaan Rahman <br>
         December 2021
     </p>
-</footer> -->
+</footer>
 
 </html>
