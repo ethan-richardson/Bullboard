@@ -10,7 +10,8 @@ from datetime import date
 from base64 import b64decode
 
 #Change this based on your file extensions
-read_file_string = "./"
+read_file_string = "../"
+
 
 # Verifies password requirements are satisfied
 def verify_password(password, password2):
@@ -73,22 +74,35 @@ def load_newsfeed_profile(token):
     if user:
         body = file.read_file(read_file_string + "frontend/pages/newsfeed.html")
         body = body.replace(b'{{name}}', user['First Name'].encode())
+        online_users = database.fetch_logged()
+        all_users = database.fetch_all()
+        user_elements = get_user_elements(online_users, all_users)
+        body = body.replace(b'{{activeUsers}}', user_elements[0])
+        body = body.replace(b'{{offlineUsers}}', user_elements[1])
         if user['Picture'] == '':
-            body_as_list = file.read_file_as_list(read_file_string + "frontend/pages/newsfeed.html")
-            start_of_list = body_as_list.index('                {{activeUser}}\n')
-            body_as_list[start_of_list] = ''
-            online_users = database.fetch_logged()
-            for user in online_users: 
-                body_as_list[start_of_list] = f'<li>{user["Email"]}</li>' + body_as_list[start_of_list] + '\n'
-            updated_body = ''.join(ele for ele in body_as_list).encode()
-            body = updated_body.replace(b'{{Prof Pic}}', b'/images/prof_pics/default.png')
+            body = body.replace(b'{{Prof Pic}}', b'/images/prof_pics/default.png')
         else:
             body = body.replace(b'{{Prof Pic}}', b'/images/prof_pics/' + user['Picture'].encode())
         return body
     else:
         return False
 
-#Creates image tags for profile loading
+def get_user_elements(online_users, all_users):
+    active = ""
+    offline = ""
+    active_map = {}
+    for user in online_users:
+        if user:
+            active_map[user['Name']] = 0
+            active += ("<br><li>" + user["Name"] + "</li><br>\n")
+    for user in all_users:
+        name = user['First Name'] + ' ' + user['Last Name']
+        if name not in active_map:
+            offline += ("<br><li>" + name + "</li><br>\n")
+
+    return [active.encode(), offline.encode()]
+
+# Creates image tags for profile loading
 def create_trait_image_tags(traits):
     output = ""
     for trait in traits:
@@ -97,7 +111,7 @@ def create_trait_image_tags(traits):
                        "\" title=\"" + trait + "\"\n>")
     return output.encode()
 
-#Gets image path
+# Gets image path
 def get_trait_image(trait):
     if trait == 'UB Athlete':
         return 'athleteIcon.png'
@@ -120,14 +134,14 @@ def get_trait_image(trait):
     elif trait == 'Night Owl':
         return 'nightOwlIcon.png'
 
-#Calculates users age from birthday
+# Calculates users age from birthday
 def age(birthday):
     birthdate = birthday.split("-")
     today = date.today()
     age = today.year - int(birthdate[0]) - ((today.month, today.day) < (int(birthdate[1]), int(birthdate[2])))
     return str(age)
 
-#Adds profile picture to server storage
+# Adds profile picture to server storage
 def add_image(picture):
     if picture['name'] != '':
         name_split = picture['name'].split('.')
@@ -144,7 +158,7 @@ def add_image(picture):
     else:
         return ''
 
-#Creates post elements for newsfeed template
+# Creates post elements for newsfeed template
 def create_post_elements():
     output = ""
     posts = database.get_posts()
@@ -153,6 +167,7 @@ def create_post_elements():
                    post['Post'] + '</p>\n')
     return output
 
+# Fetches user info from database
 def get_user(token):
     if token:
         user = database.retrieve_user(token)

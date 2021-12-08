@@ -18,7 +18,7 @@ def verify_login(user_info):
     if found_user:
         # Password matches
         if bcrypt.checkpw(user_info['password'].encode(), found_user['Password'].encode()):
-            return True
+            return found_user
         # Invalid password
         else:
             return False
@@ -60,10 +60,13 @@ def add_user(user_info):
     return
 
 
-def store_token(email, token):
+def store_token(user, token):
     db = connect()
     hashed_token = functions.hash_token(token)
-    db.users.update_one({"Email": email}, {"$set": {"Token": hashed_token}})
+    name = user["First Name"] + " " + user["Last Name"]
+    db.active.create_index("Inserted", expireAfterSeconds=3600)
+    db.active.insert_one({"Name": name, "Token": hashed_token, "Inserted": datetime.datetime.utcnow()})
+    db.users.update_one({"Email": user["Email"]}, {"$set": {"Token": hashed_token}})
     return
 
 
@@ -99,6 +102,7 @@ def construct_update_json(data, image_name):
         'Major': functions.html_escaper(data['major']),
         'Standing': functions.html_escaper(data['standing']),
         'Housing Status': functions.html_escaper(data['status']),
+        'Hometown': functions.html_escaper(data['hometown']),
         'Traits': traits
     }
     if image_name != '':
@@ -124,10 +128,15 @@ def get_posts():
 
 def fetch_logged():
     db = connect()
-    online = []
-    collection = db.users.find({})
-    for doc in collection:
-        if len(doc["Token"]) != 0:
-            online.append(doc)
-    return online
+    return db.active.find({})
 
+
+def process_logout(user):
+    db = connect()
+    db.active.delete_one({'Token': user['Token']})
+    db.users.update_one({'_id': user['_id']}, {'$set': {'Token': ''}})
+
+def fetch_all():
+    db = connect()
+    users = db.users.find({})
+    return users
