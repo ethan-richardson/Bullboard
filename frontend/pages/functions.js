@@ -1,3 +1,5 @@
+//const socket = new WebSocket('ws://' + window.location.host + '/websocket');
+
 //Generates registration json string
 function registrationJSON() {
     var email = document.getElementById("email");

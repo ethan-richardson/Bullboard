@@ -152,5 +152,3 @@ def send_message(request, data):
         return [b"", b"Message added", response_code, content_type]
     else:
         return [b"", b"You must log in", 403, "text/plain"]
-
-

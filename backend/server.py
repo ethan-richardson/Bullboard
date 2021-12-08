@@ -35,8 +35,11 @@ async def post_handler(request):
         charset="utf-8"
     )
 
+clients = []
+
 async def websocket_handler(request):
     ws = web.WebSocketResponse()
+    clients.append(ws)
     await ws.prepare(request)
     print("A new client has connected!")
     # We're waiting for requests here
@@ -44,15 +47,16 @@ async def websocket_handler(request):
         if msg.type == aiohttp.WSMsgType.TEXT:
             if msg.data == 'close':
                 await ws.close()
-            else:
-                # this will probably change
-                #await ws.send_str(msg.data + '/newsfeed')
-                pass
+            elif "x" in msg.data and "y" in msg.data:
+                for client in clients:
+                    if client != ws:
+                        await client.send_str(msg.data)
         # If there is an exception, the socket will close
         elif msg.type == aiohttp.WSMsgType.ERROR:
             print('ws connection closed w/ exception %s' % ws.exception())
     # If we've reached the end of control flow, then the socket has closed
     print('websocket connection closed')
+    clients.remove(ws)
     return ws
 
 async def image_handler(request):
@@ -87,6 +91,7 @@ app.add_routes([
     web.get('/images/prof_pics/{name}', image_handler),
     web.get('/register', get_handler),
     web.get('/functions.js', get_handler),
+    web.get('/canvas.js', get_handler),
     web.get('/styles.css', get_handler),
     web.post('/login_attempt', post_handler),
     web.post('/create_account', post_handler),
