@@ -4,21 +4,21 @@ import database
 import functions
 
 #Change this based on your file extensions
-read_file_string = "../"
+read_file_string = "./"
 
 # Serves the login page
 def login(request):
     body = file.read_file(read_file_string + "frontend/pages/index.html")
     response_code = 200
     content_type = "text/html"
-    return [None, body, response_code, content_type]
+    return [body, response_code, content_type]
 
 # Serves the registration page
 def register(request):
     body = file.read_file(read_file_string + "frontend/pages/create_account.html")
     response_code = 200
     content_type = "text/html"
-    return [None, body, response_code, content_type]
+    return [body, response_code, content_type]
 
 # Serves respective user profile
 def profile(request):
@@ -28,18 +28,18 @@ def profile(request):
         if body:
             response_code = 200
             content_type = "text/html"
-            return [None, body, response_code, content_type]
+            return [body, response_code, content_type]
         else:
-            return [None, b"You must log in", 403, "text/plain"]
+            return [b"", b"You must log in", 403, "text/plain"]
     else:
-        return [None, b"You must log in", 403, "text/plain"]
+        return [b"", b"You must log in", 403, "text/plain"]
 
 # Serves the edit profile page
 def edit(request):
     body = file.read_file(read_file_string + "frontend/pages/edit_profile.html")
     response_code = 200
     content_type = "text/html"
-    return [None, body, response_code, content_type]
+    return [body, response_code, content_type]
 
 
 # Serves the newsfeed with posts
@@ -49,21 +49,21 @@ def newsfeed(request):
     body = body.replace(b'{{posts}}', newsfeed_elements.encode())
     response_code = 200
     content_type = "text/html"
-    return [None, body, response_code, content_type]
+    return [body, response_code, content_type]
 
 # Serves the interactive map
 def map(request):
     body = file.read_file(read_file_string + "frontend/pages/live_map.html")
     response_code = 200
     content_type = "text/html"
-    return [None, body, response_code, content_type]
+    return [body, response_code, content_type]
 
 # Serves the direct messages
 def messages(request):
     body = file.read_file(read_file_string + "frontend/pages/direct_messages.html")
     response_code = 200
     content_type = "text/html"
-    return [None, body, response_code, content_type]
+    return [body, response_code, content_type]
 
 # Respond to HTML paths here.
 def resp_to_html_paths(request):
@@ -71,33 +71,20 @@ def resp_to_html_paths(request):
     body = file.read_file(read_file_string + "frontend/pages%s" % path)
     response_code = 200
     if path.endswith(".css"):
-        return [None, body, response_code, "text/css"]
+        return [body, response_code, "text/css"]
     elif path.endswith(".js"):
-        return [None, body, response_code, "text/javascript"]
+        return [body, response_code, "text/javascript"]
     elif path.endswith(".png"):
-        return [None, body, response_code, "image/png"]
+        return [body, response_code, "image/png"]
     else:
-        return [None, body, response_code, "image/jpeg"]
-
-# Handles logout attempts
-def logout(request):
-    token = request.cookies.get('token')
-    user = functions.get_user(token)
-    if user:
-        database.process_logout(user)
-    headers = {
-        'Set-Cookie': 'token=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT',
-        'Location': ' /',
-    }
-    return [headers, None, 302, None]
+        return [body, response_code, "image/jpeg"]
 
 # Handles login attempts
 def login_attempt(request, data):
-    user = database.verify_login(data)
-    if user:
+    if database.verify_login(data):
         #Create login token on successful login
         token = functions.login_token()
-        database.store_token(user, token)
+        database.store_token(data['email'], token)
         header = {'Set-Cookie': 'token=' + token + '; Max-Age=3600; HttpOnly'}
         return [header, b"User Found", 200, "text/plain"]
     else:
@@ -150,5 +137,3 @@ def send_message(request, data):
         return [b"", b"Message added", response_code, content_type]
     else:
         return [b"", b"You must log in", 403, "text/plain"]
-
-
