@@ -5,7 +5,7 @@ from pymongo import MongoClient
 import functions
 
 # TODO: Change from localhost to mongo when using docker, use localhost when running locally
-mongoString = "mongodb://mongo:27017"
+mongoString = "mongodb://localhost:27017"
 
 def connect():
     client = MongoClient(mongoString)
@@ -42,6 +42,7 @@ def add_user(user_info):
             'Night Owl': False
         }
     json = {
+        'UBIT': functions.html_escaper(user_info['email']).split('@')[0],
         'Email': functions.html_escaper(user_info['email']),
         'First Name': functions.html_escaper(user_info['first']),
         'Last Name': functions.html_escaper(user_info['last']),
@@ -77,7 +78,7 @@ def retrieve_user_email(email):
 
 def retrieve_user(token):
     db = connect()
-    #Hash users current token
+    # Hash users current token
     token = functions.hash_token(token)
     result = db.users.find_one({"Token": token})
     return result
@@ -147,3 +148,33 @@ def fetch_all():
     db = connect()
     users = db.users.find({})
     return users
+
+def add_message(sender, data):
+    db = connect()
+    receiver = db.users.find_one({"UBIT": data['Recipient']})
+    if receiver:
+        json = {
+            'Sender_to_Recipient': sender['First Name'] + " " + sender['Last Name'] + " to " + receiver['First Name'] + " " + receiver['Last Name'],
+            'Sender': sender['UBIT'],
+            'Recipient': receiver['UBIT'],
+            'Message': functions.html_escaper(data['Message']),
+            'Sent': datetime.datetime.now(),
+        }
+        db.messages.insert_one(json)
+        get_messages(sender, receiver)
+
+
+def get_messages(sender, receiver):
+    db = connect()
+    sender_receiver = sender['First Name'] + " " + sender['Last Name'] + " to " + receiver['First Name'] + " " + receiver['Last Name']
+    result = db.messages.find({"Sender_to_Recipient": sender_receiver}).sort('Sent', pymongo.DESCENDING)
+    return result
+
+def get_receiver(sender):
+    db = connect()
+    ubit = sender["UBIT"]
+    messages = db.messages.find_one({"Sender": ubit})
+    if messages:
+        receiver = db.users.find_one({"UBIT": messages['Recipient']})
+        if receiver:
+            return receiver
