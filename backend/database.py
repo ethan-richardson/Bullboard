@@ -45,7 +45,7 @@ def add_user(user_info):
         'Email': functions.html_escaper(user_info['email']),
         'First Name': functions.html_escaper(user_info['first']),
         'Last Name': functions.html_escaper(user_info['last']),
-        'Picture': '',
+        'Picture': 'default.png',
         'Token': '',
         'Password': hashed_pw,
         'Birthday': functions.html_escaper(user_info['birthday']),
@@ -65,7 +65,7 @@ def store_token(user, token):
     hashed_token = functions.hash_token(token)
     name = user["First Name"] + " " + user["Last Name"]
     db.active.create_index("Inserted", expireAfterSeconds=3600)
-    db.active.insert({"Name": name, "Token": hashed_token, "Inserted": datetime.datetime.utcnow()})
+    db.active.insert_one({"Name": name, "Token": hashed_token, "Inserted": datetime.datetime.utcnow()})
     db.users.update_one({"Email": user["Email"]}, {"$set": {"Token": hashed_token}})
     return
 
@@ -113,9 +113,11 @@ def construct_update_json(data, image_name):
 def add_post(user, post):
     db = connect()
     json = {
-        'First Name': user['First Name'],
-        'Last Name': user['Last Name'],
+        'Name': user['First Name'] + ' ' + user['Last Name'],
+        'Standing': user['Standing'],
         'Post': functions.html_escaper(post['post']),
+        'Picture': user['Picture'],
+        'Traits': user['Traits'],
         'Posted': datetime.datetime.now(),
     }
     db.posts.insert_one(json)
