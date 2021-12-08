@@ -10,7 +10,7 @@ from datetime import date
 from base64 import b64decode
 
 #Change this based on your file extensions
-read_file_string = ""
+read_file_string = "../"
 
 
 
@@ -189,3 +189,11 @@ def get_user(token):
             return False
     else:
         return False
+
+def create_messages(user, receiver):
+    output = ""
+    messages = database.get_messages(user, receiver)
+    for message in messages:
+        output += ('<p class=\"newsfeedPost\"><b>' + message['Sender'] + '</b>: ' +
+                   message['Message'] + '</p>\n')
+    return output
