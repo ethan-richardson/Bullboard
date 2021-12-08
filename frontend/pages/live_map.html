@@ -19,59 +19,35 @@
     <title>Live Map</title>
 </head>
 
-<body style="margin: 0">
-    <div id="map" style="width: 100vw; height: 100vh"></div>
-    <script src="http://js.api.here.com/v3/3.0/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
-    <script src="http://js.api.here.com/v3/3.0/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
-    <script src="http://js.api.here.com/v3/3.0/mapsjs-mapevents.js" type="text/javascript" charset="utf-8"></script>
-    <script src="http://cdnjs.cloudflar.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
-    <script>
-        const platform = new H.service.Platform({
-            "app_id": "0JK53jN7Faa5a5rF35Sz",
-            "app_code": "SqWcupOF8jY3JHYYKD0NSw"
-        });
-        const defaultMapLayers = platform.createDefaultLayers();
-        const map = new H.Map(
-            document.getElementById("map"),
-            defaultMapLayers.normal.map,
-            {
-                zoom: 13,
-                center: { lat: 43.0027, lng: -78.7847}
-            }
-        );
-        const mapEvents = new H.mapevents.MapEvents(map);
-        const behavior = new H.mapevents.Behavior(mapEvents);
-        const socket = io("http://localhost:3000");
-        
-        socket.on("marker", data => {
-            console.log("marker")
-            const marker = new H.map.Marker(data);
-            console.log(marker);
-            map.addObject(marker);
-        });
-        map.addEventListener("tap", event => {
-            console.log("tap")
-            const position = map.screenToGeo(
-                event.currentPointer.viewportX,
-                event.currentPointer.viewportY
-            );
-            const marker = new H.map.Marker(position);
-            console.log(marker);
-            map.addObject(marker);
-            socket.emit("marker", position);
-        });
-    </script>
-
+<body>
+    <script src="canvas.js"></script>
     <nav>
         <ul>
-            <li><a href="newsfeed.html">HOME</a></li>
-            <li><a href="profile.html">PROFILE</a></li>
-            <li><a href="direct_messages.html">MESSAGES</a></li>
-            <li><a class="active" href="live_map.html">MAP</a></li>
-            <li style="float:right"><a href="index.html">LOG OUT</a></li>
+            <li><a href="/newsfeed">HOME</a></li>
+            <li><a href="/profile">PROFILE</a></li>
+            <li><a href="/messages">MESSAGES</a></li>
+            <li><a class="active" href="/map">MAP</a></li>
+            <li style="float:right"><a href="/logout">LOG OUT</a></li>
         </ul>
     </nav>
-    
+
+    <!-- <img id="map" src="/images/northCampus.png" alt="North Campus Map"> -->
+    <canvas id="canvas" width="1379" height="974"></canvas>
+
+    <!-- <div class="grid-container">
+        <div id="liveUsers">
+            <p>This is where the active users who are currently drawing on the map will be</p>
+        </div>
+    </div> -->
+    <!-- <canvas id="canvas"> 
+
+    </canvas>
+     <div id="img"> <img width="400px" src="/images/northCampus.png" alt="Bull Construction"> </div> -->
+    <!-- <div style="text-align: center;">
+        <br><br><br>
+         <h1 style="text-align: center; margin: 30px;">This Page is Under Construction</h1> 
+        <img width="400px" src="/images/northCampus.png" alt="Bull Construction">
+    </div> -->
 </body>
 
 <footer>

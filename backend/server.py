@@ -1,37 +1,96 @@
-from http.server import BaseHTTPRequestHandler, HTTPServer, SimpleHTTPRequestHandler, ThreadingHTTPServer
-import request, respond, route
-import cgi
+from aiohttp import web
+import aiohttp
+import routes
+import actions
+import database
 
-# Using BaseHTTPRequestHandler as our request handler
-class HTTP(BaseHTTPRequestHandler):
+# Handle GET requests here
+async def get_handler(request):
+    # Get all the routes associated with a GET request
+    allGetRoutes = routes.get_routes
+    # Call the action that is associated with the current request
+    action = allGetRoutes[request.path]
+    response = action(request)
+    # Send a server response
+    return web.Response(
+        headers=response[0],
+        body=response[1],
+        status=response[2],
+        content_type=response[3],
+        charset="utf-8"
+    )
 
-    # We'll GET requests in this function.
-    def do_GET(self):
-        # Create an object based on the current request
-        req = request.Request(self.headers, "GET", self.path)
-        # Create a router object to route based on the current request
-        router = route.Router(self)
-        route.add_paths(router)
-        router.handle_request(req)
-        # TODO - Do stuff according to the path here.
-        
-    # We'll handle POST requests in this function.
-    def do_POST(self):
-        # TODO - We'll have to escape the HTML and then save usernames/passwords
-        # in a database.
-        pass
+# Handle POST requests here
+async def post_handler(request):
+    data = await request.json()
+    allPostRoutes = routes.post_routes
+    action = allPostRoutes[request.path]
+    response = action(request, data)
+    # Send a server response
+    return web.Response(
+        headers=response[0],
+        body=response[1],
+        status=response[2],
+        content_type=response[3],
+        charset="utf-8"
+    )
 
+clients = []
 
-# TODO - Need to figure how to implement WebSockets with the HTTP library.
-# TODO - Using BaseHTTPRequestHandler doesn't take care of multi-threading.
+async def websocket_handler(request):
+    ws = web.WebSocketResponse()
+    clients.append(ws)
+    await ws.prepare(request)
+    print("A new client has connected!")
+    # We're waiting for requests here
+    async for msg in ws:
+        if msg.type == aiohttp.WSMsgType.TEXT:
+            if msg.data == 'close':
+                await ws.close()
+            elif "x" in msg.data and "y" in msg.data:
+                for client in clients:
+                    if client != ws:
+                        await client.send_str(msg.data)
+        # If there is an exception, the socket will close
+        elif msg.type == aiohttp.WSMsgType.ERROR:
+            print('ws connection closed w/ exception %s' % ws.exception())
+    # If we've reached the end of control flow, then the socket has closed
+    print('websocket connection closed')
+    clients.remove(ws)
+    return ws
+
+async def image_handler(request):
+    response = actions.resp_to_html_paths(request)
+    return web.Response(
+        headers=response[0],
+        body=response[1],
+        status=response[2],
+        content_type=response[3],
+        charset="utf-8"
+    )
+
+app = web.Application()
+app.add_routes([
+    web.get('/login', get_handler),
+    web.get('/', get_handler),
+    web.get('/images/{name}', image_handler),
+    web.get('/images/prof_pics/{name}', image_handler),
+    web.get('/register', get_handler),
+    web.get('/functions.js', get_handler),
+    web.get('/canvas.js', get_handler),
+    web.get('/styles.css', get_handler),
+    web.post('/login_attempt', post_handler),
+    web.post('/create_account', post_handler),
+    web.get('/websocket', websocket_handler),
+    web.get('/newsfeed', get_handler),
+    web.get('/profile', get_handler),
+    web.post('/edit_profile', post_handler),
+    web.get('/edit', get_handler),
+    web.get('/messages', get_handler),
+    web.get('/map', get_handler),
+    web.post('/add_post', post_handler),
+    web.post('/send_message', post_handler),
+    web.get('/logout', get_handler)
+])
 # Run the server
-def main():
-    HOST = "localhost"
-    PORT = 8000
-    server_address = (HOST, PORT)
-    server = HTTPServer(server_address, HTTP)
-    print("Server running on port %s" % PORT)
-    server.serve_forever()
-
-if __name__ == "__main__":
-    main()
+web.run_app(app)

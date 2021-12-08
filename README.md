@@ -3,6 +3,8 @@
 CSE 312: Web Applications
 Unviersity at Buffalo
 
+Run `pip install -r requirements.txt` 
+
 figma: https://www.figma.com/file/O5GbGGKIby6NiW5UhK1JeG/CSE312-Final-Project?node-id=0%3A1
 
 doc: https://docs.google.com/document/d/1xoURESIFJIwyUN3zZtx47L9PtKmTPfEAfhOtme1QRGM/edit
@@ -20,3 +22,4 @@ TODO:
 - [X] Work on Figma
 - [ ] Setup/Figure out database
 - [ ] Work on Open-Source Report for Django or MongoDB
+- [X] Open-Source Report on HTTP library located at https://github.com/ethan-richardson/Bullboard/blob/jay/reports/Open-Source%20Library%20Report%20-%20HTTP.pdf
