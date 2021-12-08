@@ -105,6 +105,8 @@ def login_attempt(request, data):
 
 # Handles account creation
 def create_account(request, data):
+    if not functions.verify_email(data['email']):
+        return [b"", b"Email is not valid or duplicate account exists", 404, "text/plain"]
     if functions.verify_password(data['password'], data['rePassword']):
         database.add_user(data)
         return [b"", b"User Added", 201, "text/plain"]
@@ -123,6 +125,7 @@ def add_post(request, data):
     else:
         return [b"", b"You must log in", 403, "text/plain"]
 
+
 # Handles profile editing
 def edit_profile(request, data):
     token = request.cookies.get('token')
@@ -136,34 +139,16 @@ def edit_profile(request, data):
     else:
         return [b"", b"You must log in", 403, "text/plain"]
 
-# Serves the direct messages
-def messages(request):
-    token = request.cookies.get('token')
-    user = functions.get_user(token)
-
-    body = file.read_file(read_file_string + "frontend/pages/direct_messages.html")
-
-    #receiver = database.get_receiver(user)
-
-    #if receiver:
-        #message_elements = functions.create_messages(user, receiver)
-        #body = body.replace(b'{{msgs}}', message_elements.encode())
-
-    response_code = 200
-    content_type = "text/html"
-    return [body, response_code, content_type]
 
 # Handles direct message sending
 def send_message(request, data):
+    print(data)
     token = request.cookies.get('token')
     user = functions.get_user(token)
-
     if user:
         # TODO: Add direct message logic here
-        database.add_message(user, data)
         response_code = 200
         content_type = "text/plain"
         return [b"", b"Message added", response_code, content_type]
-
     else:
         return [b"", b"You must log in", 403, "text/plain"]

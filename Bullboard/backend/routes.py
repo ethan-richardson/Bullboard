@@ -6,6 +6,7 @@ get_routes = {
     "/": actions.login,
     "/register": actions.register,
     "/functions.js": actions.resp_to_html_paths,
+    "/canvas.js": actions.resp_to_html_paths,
     "/styles.css": actions.resp_to_html_paths,
     "/newsfeed": actions.newsfeed,
     "/profile": actions.profile,
@@ -23,5 +24,4 @@ post_routes = {
     "/add_post": actions.add_post,
     "/edit_profile": actions.edit_profile,
     "/send_message": actions.send_message,
-
 }

@@ -13,6 +13,7 @@ from base64 import b64decode
 read_file_string = ""
 
 
+
 # Verifies password requirements are satisfied
 def verify_password(password, password2):
     if password != password2:
@@ -22,6 +23,11 @@ def verify_password(password, password2):
     else:
         return False
 
+def verify_email(email):
+    if re.match(r"^[a-zA-Z0-9]{3,}@buffalo\.edu$", email) and not database.retrieve_user_email(email):
+        return True
+    else:
+        return False
 
 # Generates login cookie
 def login_token():
@@ -183,16 +189,3 @@ def get_user(token):
             return False
     else:
         return False
-
-def create_messages(user, receiver):
-    output = ""
-    messages = database.get_messages(user, receiver)
-    for message in messages:
-        output += ('<p class=\"newsfeedPost\"><b>' + message['Sender'] + '</b>: ' +
-                   message['Message'] + '</p>\n')
-
-
-
-
-
-

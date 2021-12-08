@@ -63,7 +63,6 @@
             <label for="profilePicture" style="font-size: 20px; line-height: 28px;">Upload Profile Picture:</label> 
             <input class="inputBox2" type="file" name="profilePicture" accept="image/*" id="profilePicture">
         </div>
-        <br>
         <div class="slidecontainer">
             <label for="budget" style="font-size: 20px;">Max Budget: $<span id="maxBudget"></span> per month</label>
             <br>
@@ -72,7 +71,6 @@
                 Drag the slider to select your maximum monthly allowance ($USD)
             </p>
         </div>
-        <br>
         <label style="font-size: 20px;">Select your personality traits (Check all that apply):</label>
         <div style="text-align: center; width:max-content; margin: auto;">
             <div class="traitDiv" >
@@ -138,7 +136,6 @@
         var slider = document.getElementById("budget");
         var output = document.getElementById("maxBudget");
         output.innerHTML = slider.value;
-        
         slider.oninput = function() {
           output.innerHTML = this.value;
         }

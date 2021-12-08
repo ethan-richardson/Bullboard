@@ -1,4 +1,4 @@
-// const socket = new WebSocket('ws://' + window.location.host + '/websocket');
+//const socket = new WebSocket('ws://' + window.location.host + '/websocket');
 
 //Generates registration json string
 function registrationJSON() {
@@ -33,11 +33,13 @@ function processRegistration() {
         request.onreadystatechange = function () {
             var feedback = document.getElementById("invalid");
             if (this.readyState === 4 && this.status === 201) {
-                alert("Account Successfully Created!")
+                window.location.replace('/');
             }  else if (this.readyState === 4 && this.status === 404) {
-                feedback.innerHTML = "Password does not meet all requirements";
-            } else if (this.readyState === 4 && this.status === 401) {
-                feedback.innerHTML = "Email already in use, try logging in";
+                if (this.responseText.startsWith("Password")) {
+                    feedback.innerHTML = "Password does not meet all requirements";
+                } else if (this.responseText.startsWith("Email")) {
+                    feedback.innerHTML = "Email is not valid or a duplicate account exists";
+                }
             }
         };
         request.open("POST", "/create_account");
@@ -186,10 +188,11 @@ function processMessage() {
             if (this.readyState === 4 && this.status === 201) {
                 // window.location.replace('/newsfeed');
             } else if (this.readyState === 4 && this.status === 404) {
-                alert("User does not exist")
+                alert("Could not add post")
             }
         };
         request.open("POST", "/send_message");
         request.send(json);
     }
 }
+
