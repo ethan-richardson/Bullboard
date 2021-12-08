@@ -14,7 +14,6 @@ get_routes = {
     "/map": actions.map,
     "/messages": actions.messages,
     "/logout": actions.logout
-
 }
 
 # Dictionary holding all possible POST requests

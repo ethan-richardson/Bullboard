@@ -190,10 +190,15 @@ def get_user(token):
     else:
         return False
 
-def create_messages(user, receiver):
+def create_messages(messages):
     output = ""
-    messages = database.get_messages(user, receiver)
     for message in messages:
-        output += ('<p class=\"newsfeedPost\"><b>' + message['Sender'] + '</b>: ' +
-                   message['Message'] + '</p>\n')
+        if 'Recipient' in message:
+            output += "<p class=\"directMessage\"><b>" + message['Name'] + '</b>: ' + message['Message'] + '</p>\n'
+        # else:
+        #     return
     return output
+
+def get_ubit(request):
+    slash_split = request.path.split('/')
+    return slash_split[2]

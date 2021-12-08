@@ -151,24 +151,48 @@ def fetch_all():
 
 def add_message(sender, data):
     db = connect()
+    print(sender['UBIT'])
     receiver = db.users.find_one({"UBIT": data['Recipient']})
+    print(receiver['UBIT'])
     if receiver:
-        json = {
-            'Sender_to_Recipient': sender['First Name'] + " " + sender['Last Name'] + " to " + receiver['First Name'] + " " + receiver['Last Name'],
+        sent = {
+                'Recipient': receiver['UBIT'],
+                'Name': sender['First Name'] + ' ' + sender['Last Name'],
+                'Message': functions.html_escaper(data['Message']),
+                'Sent': datetime.datetime.now(),
+            }
+        received = {
             'Sender': sender['UBIT'],
-            'Recipient': receiver['UBIT'],
+            'Name': receiver['First Name'] + ' ' + receiver['Last Name'],
             'Message': functions.html_escaper(data['Message']),
             'Sent': datetime.datetime.now(),
         }
-        db.messages.insert_one(json)
-        get_messages(sender, receiver)
+        db.messages.update({'User': sender['UBIT']}, {'$push': {'Sent Messages': sent}}, True)
+        db.messages.update({'User': receiver['UBIT']}, {'$push': {'Received Messages': received}}, True)
+        return get_messages(sender, receiver)
+
 
 
 def get_messages(sender, receiver):
     db = connect()
-    sender_receiver = sender['First Name'] + " " + sender['Last Name'] + " to " + receiver['First Name'] + " " + receiver['Last Name']
-    result = db.messages.find({"Sender_to_Recipient": sender_receiver}).sort('Sent', pymongo.DESCENDING)
-    return result
+    sent = db.messages.find({'User': sender,'Sent Messages.Recipient': receiver})
+    received = db.messages.find({'User': sender,'Received Messages.Sender': receiver})
+    # print(len(list(sent.clone())))
+    # print(len(list(received.clone())))
+    if sent.count_documents > 0 and received.count_documents > 0:
+        sent_messages = sent.next()['Sent Messages']
+        received_messages = received.next()['Received Messages']
+        all_messages = sent_messages + received_messages
+        all_messages.sort(key=lambda x:x['Sent'])
+        return all_messages
+    elif len(list(sent)) > 0:
+        sent_messages = sent.next()['Sent Messages']
+        return sent_messages
+    elif len(list(received)) > 0:
+        received_messages = received.next()['Received Messages']
+        return received_messages
+    else:
+        return None
 
 def get_receiver(sender):
     db = connect()
