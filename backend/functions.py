@@ -10,11 +10,8 @@ from datetime import date
 from base64 import b64decode
 
 #Change this based on your file extensions
-<<<<<<< HEAD
 read_file_string = ""
-=======
-read_file_string = "./"
->>>>>>> origin/zayaan
+
 
 
 # Verifies password requirements are satisfied
