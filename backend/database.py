@@ -65,7 +65,8 @@ def store_token(user, token):
     hashed_token = functions.hash_token(token)
     name = user["First Name"] + " " + user["Last Name"]
     db.active.create_index("Inserted", expireAfterSeconds=3600)
-    db.active.insert_one({"Name": name, "Token": hashed_token, "Inserted": datetime.datetime.utcnow()})
+    input_json = {"Name": name, "Token": hashed_token, "Inserted": datetime.datetime.utcnow()}
+    db.active.replace_one({"Name": name}, input_json, True)
     db.users.update_one({"Email": user["Email"]}, {"$set": {"Token": hashed_token}})
     return
 

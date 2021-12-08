@@ -33,7 +33,7 @@ function processRegistration() {
         request.onreadystatechange = function () {
             var feedback = document.getElementById("invalid");
             if (this.readyState === 4 && this.status === 201) {
-                alert("Account Successfully Created!")
+                window.location.replace('/');
             }  else if (this.readyState === 4 && this.status === 404) {
                 feedback.innerHTML = "Password does not meet all requirements";
             }
