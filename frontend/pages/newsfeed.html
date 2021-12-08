@@ -30,7 +30,9 @@
             <li style="float:right"><a href="/">LOG OUT</a></li>
         </ul>
     </nav>
+
     <div class="grid-container">
+
         <div class="profile">
             <img id="profPic2" src="{{Prof Pic}}" alt="Profile Picture">
             <h2>Welcome, {{name}}!</h2>
@@ -70,36 +72,17 @@
 
         <div class="newsfeed">
             
-            <div id="newsfeedPost">
-                <img id="newsfeedPic" src="/frontend/pages/images/prof_pics/default.png" alt="Profile Picture">
+            <div class="newsfeedPost">
+                <img class="newsfeedPic" src="{{Prof Pic}}" alt="Profile Picture">
                 <h4>
-                    <b>First Name Last Name</b>
-                    <br>Standing
+                    <b>{{name}}</b>
+                    <br>{{standing}}
                 </h4>
-                <p id="newsfeedMessage">"Status message would go here!"</p>
-                <a id="dm" href="direct_messages.html">Message</a>
+                <p class="newsfeedMessage">{{}}</p>
+                <a class="dm" href="#direct_messages">Message</a>
                 <br>
             </div>
-            <div id="newsfeedPost">
-                <img id="newsfeedPic" src="/frontend/pages/images/prof_pics/default.png" alt="Profile Picture">
-                <h4>
-                    <b>First Name Last Name</b>
-                    <br>Standing
-                </h4>
-                <p id="newsfeedMessage">"Status message would go here!"</p>
-                <a id="dm" href="direct_messages.html">Message</a>
-                <br>
-            </div>
-            <div id="newsfeedPost">
-                <img id="newsfeedPic" src="/frontend/pages/images/prof_pics/default.png" alt="Profile Picture">
-                <h4>
-                    <b>First Name Last Name</b>
-                    <br>Standing
-                </h4>
-                <p id="newsfeedMessage">"Status message would go here!"</p>
-                <a id="dm" href="direct_messages.html">Message</a>
-                <br>
-            </div>
+
             <!-- {{posts}} -->
         </div>
     </div>
