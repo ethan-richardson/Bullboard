@@ -4,7 +4,7 @@ import database
 import functions
 
 #Change this based on your file extensions
-read_file_string = "../"
+read_file_string = ""
 
 # Serves the login page
 def login(request):
@@ -60,13 +60,20 @@ def map(request):
 
 # Serves the direct messages
 def messages(request):
+    if request.path == '/messages/':
+        receiver = None
+    else:
+        receiver = functions.get_ubit(request)
     token = request.cookies.get('token')
     user = functions.get_user(token)
     body = file.read_file(read_file_string + "frontend/pages/direct_messages.html")
-    receiver = database.get_receiver(user)
     if receiver:
-        message_elements = functions.create_messages(user, receiver)
-        body = body.replace(b'{{msgs}}', message_elements.encode())
+        messages = database.get_messages(user['UBIT'], receiver)
+        if messages:
+            message_elements = functions.create_messages(messages)
+            body = body.replace(b'{{msgs}}', message_elements.encode())
+        else:
+            body = body.replace(b'{{msgs}}', b'')
     response_code = 200
     content_type = "text/html"
     return [None, body, response_code, content_type]

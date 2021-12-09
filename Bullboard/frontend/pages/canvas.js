@@ -37,6 +37,7 @@ window.addEventListener("load",() => {
         ctx.stroke();
         ctx.beginPath();
         ctx.moveTo(x, y);
+        ctx.beginPath()
     }
 
     function draw(e){
@@ -56,7 +57,7 @@ window.addEventListener("load",() => {
         ctx.stroke();
         ctx.beginPath();
         ctx.moveTo(e.clientX, e.clientY);
-
+        ctx.beginPath()
     }
 
     canvas.addEventListener("mousedown",startPosition);

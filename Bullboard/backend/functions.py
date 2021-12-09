@@ -1,4 +1,3 @@
-import base64
 import hashlib
 import bcrypt
 import re
@@ -10,7 +9,7 @@ from datetime import date
 from base64 import b64decode
 
 #Change this based on your file extensions
-read_file_string = "../"
+read_file_string = ""
 
 
 
@@ -190,10 +189,14 @@ def get_user(token):
     else:
         return False
 
-def create_messages(user, receiver):
+def create_messages(messages):
     output = ""
-    messages = database.get_messages(user, receiver)
     for message in messages:
-        output += ('<p class=\"newsfeedPost\"><b>' + message['Sender'] + '</b>: ' +
-                   message['Message'] + '</p>\n')
+            output += "<p class=\"directMessage\"><b>" + message['Name'] + '</b>: ' + message['Message'] + '</p>\n'
     return output
+
+def get_ubit(request):
+    slash_split = request.path.split('/')
+    return slash_split[2]
+
+# def get_ubits():
