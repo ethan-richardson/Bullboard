@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gruppo&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Emblema+One&family=Gruppo&display=swap" rel="stylesheet">
+
+    <!-- style sheet -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- tab name -->
+    <title>Login</title>
+</head>
+
+<body>
+    <div id="loginImg">
+        <img src="../images/bull_knocker.jpeg" alt="bull door knocker">
+    </div>
+
+
+    <div id="loginInfo">
+        <h1 id="loginHeading">
+            BULL BOARD
+        </h1>
+        <div id="loginBox">
+            <br>
+            <p id="login">
+                Login using your<br>
+                University at Buffalo email!
+            </p>
+            <form action="/login_attempt" method="post" enctype="multipart/form-data">
+                <label for="email"></label>
+                <input id="email" class="loginInputBox" size="30" placeholder="ubit@buffalo.edu" type="email" name="email" pattern="[a-zA-Z0-9]{3,}@buffalo.edu" required>
+                <br>
+                <label for="password"></label> 
+                <input id="password" class="loginInputBox" size="30" placeholder="Password" type="password" name="password" required>
+                <br>
+                <button id="signinButton">Sign In</button>
+            </form>
+            <p style="font-size: 18px;">
+                New to Bull Board? <br>
+                Create a new account 
+                <a href="create_account.html">here</a>!
+            </p>
+        </div>
+        <p id="incorrectLogin">
+            Invalid User Account! <br>
+            *will appear if error found*
+        </p>
+    </div>
+    
+    <footer>
+        <p>
+            BULL BOARD <br>
+            Developed by Lauren Richardson, Jay Hou, Ethan Richardson, Cindy Cheng, Zayaan Rahman <br>
+            December 2021
+        </p>
+    </footer>
+</body>
+
+</html>
