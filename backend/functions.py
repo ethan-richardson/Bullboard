@@ -9,10 +9,8 @@ import time
 from datetime import date
 from base64 import b64decode
 
-#Change this based on your file extensions
-read_file_string = "../"
-
-
+# Change this based on your file extensions
+read_file_string = ""
 
 # Verifies password requirements are satisfied
 def verify_password(password, password2):

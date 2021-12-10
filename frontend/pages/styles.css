@@ -414,3 +414,13 @@ ul {
     font-weight: 300;
     padding: 20px;
 }
+
+#messageButton {
+    text-align: center;
+    width: 90px;
+    height: 40px;
+    font-family: 'Gruppo', cursive;
+    font-weight: bold;
+    font-size: 20px;
+    margin-top: 10px;
+}

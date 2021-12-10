@@ -13,7 +13,7 @@ get_routes = {
     "/edit": actions.edit,
     "/map": actions.map,
     "/messages": actions.messages_home,
-    "/logout": actions.logout
+    "/logout": actions.logout,
 }
 
 # Dictionary holding all possible POST requests

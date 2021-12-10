@@ -27,17 +27,21 @@ function registrationJSON() {
 function processRegistration() {
     const json = registrationJSON();
     if (json !== "") {
-        const request = new XMLHttpRequest();
-        request.onreadystatechange = function () {
-            var feedback = document.getElementById("invalid");
-            if (this.readyState === 4 && this.status === 201) {
-                window.location.replace('/');
-            } else if (this.readyState === 4 && this.status === 404) {
+    const request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        var feedback = document.getElementById("invalid");
+        if (this.readyState === 4 && this.status === 201) {
+            window.location.replace('/');
+        } else if (this.readyState === 4 && this.status === 404) {
+            if (this.responseText.startsWith("Password")) {
+                feedback.innerHTML = "Password does not meet all requirements";
+            } else if (this.responseText.startsWith("Email")) {
+                feedback.innerHTML = "Email is not valid or a duplicate account exists";
             }
-            ;
-            request.open("POST", "/create_account");
-            request.send(json);
         }
+    }
+    request.open("POST", "/create_account");
+    request.send(json);
     }
 }
 
@@ -190,6 +194,6 @@ function processMessage() {
 }
 
 function loadDM(recipient) {
-    window.location.assign("messages/" + recipient)
+    window.location.assign("messages/" + recipient);
 }
 
