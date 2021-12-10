@@ -146,7 +146,6 @@ function processRegistration() {
 //Sends post info to server
     function processPost() {
         const json = addPostJSON();
-        console.log(json)
         if (json !== "") {
             const request = new XMLHttpRequest();
             request.onreadystatechange = function () {
@@ -176,19 +175,21 @@ function processMessage() {
     var messageJSON = sendMessageJSON();
     const recipient = messageJSON[1];
     const json = messageJSON[0];
-    console.log(json);
-    console.log(recipient);
     if (json !== "") {
         const request = new XMLHttpRequest();
         request.onreadystatechange = function () {
             if (this.readyState === 4 && this.status === 201) {
-                alert();
+                window.location.replace("/messages/" + recipient);
             } else if (this.readyState === 4 && this.status === 404) {
-                alert('Post could not be added');
+                alert('Message could not be added');
             }
         }
         request.open("POST", "/messages/" + recipient);
         request.send(json);
     }
+}
+
+function loadDM(recipient) {
+    window.location.assign("messages/" + recipient)
 }
 

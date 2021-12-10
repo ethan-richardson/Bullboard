@@ -58,22 +58,36 @@ def map(request):
     content_type = "text/html"
     return [None, body, response_code, content_type]
 
+# Serves the messages home page
+def messages_home(request):
+    body = file.read_file(read_file_string + "frontend/pages/messages_home.html")
+    token = request.cookies.get('token')
+    user = functions.get_user(token)
+    user_elements = functions.create_ubit_elements(user)
+    body = body.replace(b'{{ubits}}', user_elements.encode())
+    response_code = 200
+    content_type = "text/html"
+    return [None, body, response_code, content_type]
+
 # Serves the direct messages
 def messages(request):
-    if request.path == '/messages/':
-        receiver = None
-    else:
-        receiver = functions.get_ubit(request)
+    receiver = functions.get_ubit(request)
     token = request.cookies.get('token')
     user = functions.get_user(token)
     body = file.read_file(read_file_string + "frontend/pages/direct_messages.html")
     if receiver:
         messages = database.get_messages(user['UBIT'], receiver)
+        body = body.replace(b'{{current_ubit}}', receiver.encode())
         if messages:
             message_elements = functions.create_messages(messages)
             body = body.replace(b'{{msgs}}', message_elements.encode())
         else:
             body = body.replace(b'{{msgs}}', b'')
+    else:
+        body = body.replace(b'{{current_ubit}}', b'')
+        body = body.replace(b'{{msgs}}', b'')
+    user_elements = functions.create_ubit_elements(user)
+    body = body.replace(b'{{ubits}}', user_elements.encode())
     response_code = 200
     content_type = "text/html"
     return [None, body, response_code, content_type]
@@ -159,9 +173,8 @@ def send_message(request, data):
     user = functions.get_user(token)
     if user:
         database.add_message(user, data)
-        response_code = 200
+        response_code = 201
         content_type = "text/plain"
         return [b"", b"Message added", response_code, content_type]
-
     else:
         return [b"", b"You must log in", 403, "text/plain"]

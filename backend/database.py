@@ -173,22 +173,25 @@ def add_message(sender, data):
 
 def get_messages(sender, receiver):
     db = connect()
-    sent = db.messages.find({'User': sender, 'Sent Messages.Recipient': receiver})
-    received = db.messages.find({'User': sender, 'Received Messages.Sender': receiver})
-    if len(list(received.clone())) > 0 and len(list(sent.clone())):
-        sent_messages = sent.next()['Sent Messages']
-        received_messages = received.next()['Received Messages']
-        all_messages = sent_messages + received_messages
-        all_messages.sort(key=lambda x: x['Sent'])
-        return all_messages
-    elif len(list(sent.clone())) > 0:
-        sent_messages = sent.next()['Sent Messages']
-        return sent_messages
-    elif len(list(received.clone())) > 0:
-        received_messages = received.next()['Received Messages']
-        return received_messages
+    sent = db.messages.find({'User': sender})
+    received = sent.clone()
+    if len(list(sent.clone())):
+        output = []
+        sent = sent.next()
+        if 'Sent Messages' in sent:
+            for message in sent['Sent Messages']:
+                if message['Recipient'] == receiver:
+                    output.append(message)
+        received = received.next()
+        if 'Received Messages' in received:
+            for message in received['Received Messages']:
+                if message['Sender'] == receiver:
+                    output.append(message)
+        output.sort(key=lambda x: x['Sent'], reverse=True)
+        return output
     else:
         return None
+
 
 def get_receiver(sender):
     db = connect()
@@ -198,3 +201,8 @@ def get_receiver(sender):
         receiver = db.users.find_one({"UBIT": messages['Recipient']})
         if receiver:
             return receiver
+
+def get_all_users():
+    db = connect()
+    users = db.users.find({})
+    return users

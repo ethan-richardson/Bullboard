@@ -100,7 +100,7 @@ app.add_routes([
     web.post('/edit_profile', post_handler),
     web.get('/edit', get_handler),
     web.get('/map', get_handler),
-    web.get('/messages', message_handler),
+    web.get('/messages', get_handler),
     web.post('/add_post', post_handler),
     web.get('/logout', get_handler),
     web.get('/messages/{ubit}', message_handler),

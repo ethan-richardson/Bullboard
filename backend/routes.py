@@ -12,7 +12,7 @@ get_routes = {
     "/profile": actions.profile,
     "/edit": actions.edit,
     "/map": actions.map,
-    "/messages": actions.messages,
+    "/messages": actions.messages_home,
     "/logout": actions.logout
 }
 

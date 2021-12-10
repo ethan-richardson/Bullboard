@@ -200,4 +200,10 @@ def get_ubit(request):
     slash_split = request.path.split('/')
     return slash_split[2]
 
-# def get_ubits():
+def create_ubit_elements(current_user):
+    users = database.get_all_users()
+    output = ""
+    for user in users:
+        if user['UBIT'] != current_user['UBIT']:
+            output += "<option value=\"" + user['UBIT'] + "\">" + user['UBIT'] + '</option>\n'
+    return output

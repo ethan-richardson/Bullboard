@@ -403,3 +403,14 @@ ul {
     font-weight: bold;
 }
 
+.users {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    padding: 20px;
+}
+
+.directMessages {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    padding: 20px;
+}
