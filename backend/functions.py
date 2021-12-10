@@ -10,7 +10,7 @@ from datetime import date
 from base64 import b64decode
 
 #Change this based on your file extensions
-read_file_string = "../"
+read_file_string = ""
 
 
 
