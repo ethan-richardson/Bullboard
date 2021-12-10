@@ -33,19 +33,19 @@
                 Login using your<br>
                 University at Buffalo email!
             </p>
-            <form action="">
+            <form action="/login_attempt" method="post" enctype="multipart/form-data">
                 <label for="email"></label>
-                <input id="email" class="loginInputBox" size="30" placeholder="ubit@buffalo.edu" type="email" name="email">
+                <input id="email" class="loginInputBox" size="30" placeholder="ubit@buffalo.edu" type="email" name="email" pattern="[a-zA-Z0-9]{3,}@buffalo.edu" required>
                 <br>
                 <label for="password"></label> 
-                <input id="password" class="loginInputBox" size="30" placeholder="Password" type="text" name="password">
+                <input id="password" class="loginInputBox" size="30" placeholder="Password" type="password" name="password" required>
                 <br>
                 <button id="signinButton">Sign In</button>
             </form>
             <p style="font-size: 18px;">
                 New to Bull Board? <br>
                 Create a new account 
-               <a href="create_account.html">here</a>!
+                <a href="create_account.html">here</a>!
             </p>
         </div>
         <p id="incorrectLogin">
@@ -58,7 +58,7 @@
         <p>
             BULL BOARD <br>
             Developed by Lauren Richardson, Jay Hou, Ethan Richardson, Cindy Cheng, Zayaan Rahman <br>
-            October 2021
+            December 2021
         </p>
     </footer>
 </body>
